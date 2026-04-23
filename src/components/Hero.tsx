@@ -8,43 +8,47 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
         <div
-          className="absolute -top-[42vh] left-[-8%] h-[95vh] w-[75vw]"
+          className="absolute left-1/2 top-[58%] h-[115vh] w-[85vw] max-w-[1200px] -translate-x-1/2 -translate-y-1/2"
           style={{
             background:
-              "radial-gradient(ellipse 60% 55% at 55% 55%, rgba(160,36,18,0.45) 0%, rgba(230,90,32,0.85) 38%, rgba(255,128,50,0.95) 46%, rgba(190,54,20,0.65) 58%, rgba(90,18,10,0.25) 76%, transparent 90%)",
-            filter: "blur(34px)",
+              "radial-gradient(ellipse 48% 52% at 50% 50%, rgba(255,108,40,0.55) 0%, rgba(210,60,22,0.45) 22%, rgba(130,30,14,0.3) 44%, rgba(60,14,8,0.15) 65%, transparent 82%)",
+            filter: "blur(55px)",
           }}
         />
+
         <div
-          className="absolute -top-[48vh] right-[-12%] h-[100vh] w-[80vw]"
+          className="absolute -left-[10%] -top-[12%] h-[70vh] w-[58vw]"
           style={{
             background:
-              "radial-gradient(ellipse 58% 52% at 45% 60%, rgba(150,34,18,0.45) 0%, rgba(220,82,28,0.85) 40%, rgba(250,122,48,0.9) 48%, rgba(180,50,18,0.6) 60%, rgba(80,16,10,0.25) 76%, transparent 90%)",
-            filter: "blur(38px)",
+              "radial-gradient(ellipse 70% 62% at 55% 55%, rgba(225,78,30,0.5) 0%, rgba(170,46,20,0.35) 28%, rgba(110,26,12,0.22) 52%, transparent 80%)",
+            filter: "blur(80px)",
           }}
         />
+
         <div
-          className="absolute -bottom-[45vh] left-[-15%] h-[100vh] w-[85vw]"
+          className="absolute right-[-4%] top-[52%] h-[58vh] w-[46vw]"
           style={{
             background:
-              "radial-gradient(ellipse 55% 55% at 50% 40%, rgba(140,32,16,0.4) 0%, rgba(215,78,28,0.8) 40%, rgba(248,120,48,0.9) 48%, rgba(170,46,18,0.55) 60%, rgba(70,14,8,0.25) 78%, transparent 92%)",
-            filter: "blur(42px)",
+              "radial-gradient(ellipse 72% 60% at 48% 52%, rgba(198,58,20,0.38) 0%, rgba(92,22,12,0.2) 52%, transparent 80%)",
+            filter: "blur(88px)",
           }}
         />
+
         <div
-          className="absolute -bottom-[50vh] right-[-10%] h-[105vh] w-[78vw]"
+          className="absolute left-[18%] bottom-[6%] h-[32vh] w-[30vw]"
           style={{
             background:
-              "radial-gradient(ellipse 58% 50% at 50% 38%, rgba(130,28,14,0.4) 0%, rgba(205,72,26,0.8) 42%, rgba(240,114,44,0.88) 50%, rgba(160,42,16,0.55) 62%, rgba(70,14,8,0.22) 78%, transparent 92%)",
-            filter: "blur(44px)",
+              "radial-gradient(ellipse 65% 60% at 55% 45%, rgba(178,44,18,0.34) 0%, rgba(70,16,10,0.15) 55%, transparent 80%)",
+            filter: "blur(72px)",
           }}
         />
+
         <div
-          className="absolute left-[35%] top-[42%] h-[45vh] w-[40vw] opacity-60"
+          className="absolute right-[22%] top-[8%] h-[24vh] w-[22vw]"
           style={{
             background:
-              "radial-gradient(ellipse 60% 50% at 50% 50%, rgba(180,46,20,0.5) 0%, rgba(140,30,14,0.3) 50%, transparent 80%)",
-            filter: "blur(60px)",
+              "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(160,40,18,0.28) 0%, transparent 72%)",
+            filter: "blur(68px)",
           }}
         />
       </div>
@@ -65,7 +69,11 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative mt-8 font-sans text-[11px] font-medium tracking-[0.4em] text-white/80 uppercase md:mt-12 md:text-xs">
+      <p className="relative mt-7 font-display text-lg italic text-white/85 md:mt-9 md:text-xl lg:text-2xl">
+        Music found, not fed.
+      </p>
+
+      <div className="relative mt-5 font-sans text-[11px] font-medium tracking-[0.4em] text-white/70 uppercase md:mt-7 md:text-xs">
         Coming Soon
       </div>
     </section>
