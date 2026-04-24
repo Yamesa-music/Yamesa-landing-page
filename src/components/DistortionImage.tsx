@@ -55,13 +55,17 @@ void main() {
 `;
 
 interface DistortionImageProps {
-  src: string;
+  srcs: string[];
   alt?: string;
 }
 
-export default function DistortionImage({ src, alt = "" }: DistortionImageProps) {
+const STRIP_W = 800;
+const STRIP_H = 1200;
+
+export default function DistortionImage({ srcs, alt = "" }: DistortionImageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const srcsKey = srcs.join("|");
 
   useEffect(() => {
     const container = containerRef.current;
@@ -142,25 +146,84 @@ export default function DistortionImage({ src, alt = "" }: DistortionImageProps)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-    const img = new Image();
-    img.crossOrigin = "anonymous";
+    const urls = srcsKey.split("|");
+    const n = Math.max(1, urls.length);
+    const imgs: HTMLImageElement[] = urls.map(() => {
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      return img;
+    });
+
     let textureReady = false;
-    img.onload = () => {
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-      gl.texImage2D(
-        gl.TEXTURE_2D,
-        0,
-        gl.RGBA,
-        gl.RGBA,
-        gl.UNSIGNED_BYTE,
-        img
-      );
-      gl.uniform2f(uImageRes, img.naturalWidth, img.naturalHeight);
-      textureReady = true;
+    let loaded = 0;
+
+    const buildTexture = () => {
+      const comp = document.createElement("canvas");
+      comp.width = STRIP_W * n;
+      comp.height = STRIP_H;
+      const ctx = comp.getContext("2d");
+      if (!ctx) return;
+
+      ctx.fillStyle = "#0A0A0A";
+      ctx.fillRect(0, 0, comp.width, comp.height);
+
+      for (let i = 0; i < n; i++) {
+        const img = imgs[i];
+        if (!img.complete || !img.naturalWidth) continue;
+        const iw = img.naturalWidth;
+        const ih = img.naturalHeight;
+        const srcAspect = iw / ih;
+        const dstAspect = STRIP_W / STRIP_H;
+        let sx = 0,
+          sy = 0,
+          sw = iw,
+          sh = ih;
+        if (srcAspect > dstAspect) {
+          const newSw = ih * dstAspect;
+          sx = (iw - newSw) / 2;
+          sw = newSw;
+        } else {
+          const newSh = iw / dstAspect;
+          sy = (ih - newSh) / 2;
+          sh = newSh;
+        }
+        try {
+          ctx.drawImage(img, sx, sy, sw, sh, i * STRIP_W, 0, STRIP_W, STRIP_H);
+        } catch (err) {
+          console.warn("DistortionImage draw failed:", err);
+        }
+      }
+
+      try {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(
+          gl.TEXTURE_2D,
+          0,
+          gl.RGBA,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          comp
+        );
+        gl.uniform2f(uImageRes, comp.width, comp.height);
+        textureReady = true;
+      } catch (err) {
+        console.warn("DistortionImage texture upload failed:", err);
+      }
     };
-    img.onerror = () => console.warn("DistortionImage failed to load:", src);
-    img.src = src;
+
+    imgs.forEach((img, i) => {
+      const onDone = () => {
+        loaded++;
+        if (loaded === n) buildTexture();
+      };
+      img.onload = onDone;
+      img.onerror = () => {
+        console.warn("DistortionImage failed to load:", urls[i]);
+        onDone();
+      };
+      img.src = urls[i];
+    });
 
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const resize = () => {
@@ -236,7 +299,7 @@ export default function DistortionImage({ src, alt = "" }: DistortionImageProps)
       gl.deleteShader(fs);
       gl.deleteTexture(texture);
     };
-  }, [src]);
+  }, [srcsKey]);
 
   return (
     <div

@@ -7,7 +7,7 @@ type Person = {
   name: string;
   role: string;
   bio: string;
-  image: string;
+  images: string[];
   x: string;
   linkedin: string;
   email: string;
@@ -18,7 +18,11 @@ const TEAM: Person[] = [
     name: "Yash Agrawal",
     role: "Founder & Curator",
     bio: "An indie music obsessive building Yamesa for the artists the algorithm forgets. Raised on mixtapes and small-venue shows, building the platform that was always needed.",
-    image: "https://picsum.photos/seed/yamesa-founder/1600/2000",
+    images: [
+      "/yash-img.jpeg",
+      "https://picsum.photos/seed/yamesa-yash-2/800/1200",
+      "https://picsum.photos/seed/yamesa-yash-3/800/1200",
+    ],
     x: "#",
     linkedin: "#",
     email: "mailto:yash@yamesa.com",
@@ -27,7 +31,11 @@ const TEAM: Person[] = [
     name: "Mehar Parnami",
     role: "Design & Brand",
     bio: "Shaping the visual voice of Yamesa. Believes the best discoveries happen at the intersection of taste and trust, and that every artist deserves a story told well.",
-    image: "https://picsum.photos/seed/yamesa-design/1600/2000",
+    images: [
+      "https://picsum.photos/seed/yamesa-mehar-1/800/1200",
+      "https://picsum.photos/seed/yamesa-mehar-2/800/1200",
+      "https://picsum.photos/seed/yamesa-mehar-3/800/1200",
+    ],
     x: "#",
     linkedin: "#",
     email: "mailto:mehar@yamesa.com",
@@ -36,7 +44,11 @@ const TEAM: Person[] = [
     name: "Sagar Gupta",
     role: "Engineering",
     bio: "Building the infrastructure behind Yamesa's curated feed. Obsessed with making technology serve artists, not the other way around.",
-    image: "https://picsum.photos/seed/yamesa-engineer/1600/2000",
+    images: [
+      "https://picsum.photos/seed/yamesa-sagar-1/800/1200",
+      "https://picsum.photos/seed/yamesa-sagar-2/800/1200",
+      "https://picsum.photos/seed/yamesa-sagar-3/800/1200",
+    ],
     x: "#",
     linkedin: "#",
     email: "mailto:sagar@yamesa.com",
@@ -187,7 +199,19 @@ export default function Team() {
   }, []);
 
   return (
-    <section
+    <>
+      <section className="relative flex flex-col items-center overflow-hidden bg-black px-6 pt-[5vh] pb-[7vh]">
+        <div className="text-center">
+          <div className="mb-[1.5vh] font-sans text-[11px] font-medium tracking-[0.4em] text-white/70 uppercase md:mb-[2vh] md:text-xs">
+            The Crew
+          </div>
+          <h2 className="font-display text-3xl italic leading-[1.05] text-white md:text-4xl lg:text-[2.5rem]">
+            Meet the team.
+          </h2>
+        </div>
+      </section>
+
+      <section
       ref={sectionRef}
       className="relative bg-black"
       style={{ height: `${TEAM.length * 130}vh` }}
@@ -207,7 +231,7 @@ export default function Team() {
             }}
           >
             <div className="pointer-events-none absolute inset-0 bg-neutral-900" />
-            <DistortionImage src={person.image} alt={person.name} />
+            <DistortionImage srcs={person.images} alt={person.name} />
 
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
@@ -275,5 +299,6 @@ export default function Team() {
         />
       </div>
     </section>
+    </>
   );
 }

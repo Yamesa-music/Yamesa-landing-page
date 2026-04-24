@@ -1,100 +1,83 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-const CHUNKS = [
-  "Streaming scaled on volume, not on taste. Most artists never made it past the algorithm.",
-  "Yamesa is curated music discovery. Every artist is handpicked by real ears, not ranked by plays.",
-  "Hear tomorrow's favorites before the charts do. No payola, no autoplay, no algorithm in the way.",
+type Chunk = {
+  kicker: string;
+  body: string;
+  asset: string;
+  ambient: "float" | "spin";
+  bg: string;
+  accent: { color: string; x: string; y: string; size: string };
+  glow: string;
+};
+
+const CHUNKS: Chunk[] = [
+  {
+    kicker: "The Platform",
+    body:
+      "Yamesa is a curated platform for the music the algorithm keeps quiet. Real ears, real taste, real artists. No payola, no autoplay, no feed optimized to keep you scrolling past the music.",
+    asset: "/logos/white-logo-bg-less.png",
+    ambient: "float",
+    bg: "#0B0707",
+    accent: {
+      color: "rgba(201, 163, 106, 0.28)",
+      x: "-10%",
+      y: "20%",
+      size: "620px",
+    },
+    glow: "rgba(201, 163, 106, 0.22)",
+  },
+  {
+    kicker: "The Feed",
+    body:
+      "Scroll through short reels of music you've never heard. Every artist is handpicked, every track chosen by real listeners. Discovery that actually discovers, one reel at a time.",
+    asset: "/reel-asset-bg-less.png",
+    ambient: "float",
+    bg: "#170A0A",
+    accent: {
+      color: "rgba(176, 36, 36, 0.32)",
+      x: "-12%",
+      y: "55%",
+      size: "720px",
+    },
+    glow: "rgba(196, 46, 38, 0.24)",
+  },
+  {
+    kicker: "The Listen",
+    body:
+      "Press play and keep going. Yamesa runs in the background of your phone, your day, your commute. Discover, save, and stream while your phone does everything else.",
+    asset: "/vinyl-bg-less.png",
+    ambient: "spin",
+    bg: "#110B06",
+    accent: {
+      color: "rgba(201, 163, 106, 0.36)",
+      x: "-8%",
+      y: "30%",
+      size: "680px",
+    },
+    glow: "rgba(211, 150, 70, 0.22)",
+  },
 ];
 
-const ARTISTS = [
-  "NAVA",
-  "SANJH",
-  "KASHTI",
-  "DHARA",
-  "RASA",
-  "MONSOON STATE",
-  "NOMAD COLLECTIVE",
-  "NORTH / SOUTH",
-  "ROOHANI",
-  "LATIF",
-  "BASSLINE BAZAAR",
-  "PARCH",
-  "EMBER",
-  "DUSKWATCH",
-  "VERSE VERSE",
-  "MALWA",
-];
+const FADE_HALF = 0.06;
+const SLIDE_DISTANCE = 48;
+const DRIFT_DISTANCE = 140;
+const BOUNDARIES = [0.33, 0.66];
 
-const TAGS = [
-  "INDIE POP",
-  "NEO-SOUL",
-  "BEDROOM POP",
-  "LO-FI",
-  "ELECTRONIC",
-  "ALTERNATIVE",
-  "HIP-HOP",
-  "JAZZ FUSION",
-  "GARAGE",
-  "HINDUSTANI",
-  "MUMBAI",
-  "DELHI",
-  "BENGALURU",
-  "KOLKATA",
-  "PUNE",
-  "SHILLONG",
-  "GOA",
-];
-
-function Marquee({
-  items,
-  reverse = false,
-}: {
-  items: string[];
-  reverse?: boolean;
-}) {
-  const row = (
-    <div className="flex shrink-0 items-center gap-10 px-5 md:gap-14 md:px-8">
-      {items.map((item, i) => (
-        <span key={i} className="flex items-center gap-10 md:gap-14">
-          <span className="font-display text-3xl italic text-white/85 md:text-5xl lg:text-6xl">
-            {item}
-          </span>
-          <span
-            aria-hidden
-            className="inline-block h-2 w-2 rounded-full bg-white/40 md:h-2.5 md:w-2.5"
-          />
-        </span>
-      ))}
-    </div>
-  );
-  return (
-    <div
-      className="relative w-full overflow-hidden"
-      style={{
-        maskImage:
-          "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-      }}
-    >
-      <div
-        className={`flex w-max ${
-          reverse ? "marquee-track-reverse" : "marquee-track"
-        }`}
-      >
-        {row}
-        <div aria-hidden>{row}</div>
-      </div>
-    </div>
-  );
+function smoothstep(t: number): number {
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
 }
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const text1Ref = useRef<HTMLSpanElement>(null);
-  const text2Ref = useRef<HTMLSpanElement>(null);
+  const paraRefs = useRef<(HTMLParagraphElement | null)[]>([]);
+  const wordsRefs = useRef<(HTMLSpanElement | null)[][]>(
+    CHUNKS.map(() => [])
+  );
+  const assetRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -103,48 +86,92 @@ export default function About() {
     let rafId = 0;
     const update = () => {
       rafId = 0;
-      const c1 = text1Ref.current;
-      const c2 = text2Ref.current;
-      if (!c1 || !c2) return;
+      const vh = window.innerHeight;
+
+      const REVEAL_START = vh * 0.82;
+      const REVEAL_END = vh * 0.4;
+      const span = REVEAL_START - REVEAL_END;
+      const LINE_STAGGER = 110;
+
+      for (let i = 0; i < CHUNKS.length; i++) {
+        const para = paraRefs.current[i];
+        if (!para) continue;
+        const paraRect = para.getBoundingClientRect();
+        const paraLeft = paraRect.left;
+        const paraWidth = Math.max(1, paraRect.width);
+        const words = wordsRefs.current[i];
+        for (const el of words) {
+          if (!el) continue;
+          const rect = el.getBoundingClientRect();
+          const xFrac = Math.max(
+            0,
+            Math.min(1, (rect.left - paraLeft) / paraWidth)
+          );
+          const effectiveY = rect.top + xFrac * LINE_STAGGER;
+          let opacity: number;
+          if (effectiveY <= REVEAL_END) opacity = 1;
+          else if (effectiveY >= REVEAL_START) opacity = 0.15;
+          else {
+            const raw = (REVEAL_START - effectiveY) / span;
+            opacity = 0.15 + smoothstep(raw) * 0.85;
+          }
+          el.style.opacity = String(opacity);
+        }
+      }
 
       const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
       const total = Math.max(1, rect.height - vh);
       const scrolled = -rect.top;
       const progress = Math.max(0, Math.min(1, scrolled / total));
 
-      const segments = CHUNKS.length - 1;
-      const scaled = Math.min(progress * segments, segments - 0.0001);
-      const segIdx = Math.floor(scaled);
-      const localProgress = scaled - segIdx;
+      const n = CHUNKS.length;
 
-      let fraction: number;
-      if (localProgress < 0.25) fraction = 0;
-      else if (localProgress > 0.75) fraction = 1;
-      else fraction = (localProgress - 0.25) / 0.5;
+      for (let i = 0; i < n; i++) {
+        const el = assetRefs.current[i];
+        if (!el) continue;
 
-      c1.textContent = CHUNKS[segIdx] ?? "";
-      c2.textContent = CHUNKS[segIdx + 1] ?? "";
+        const startBoundary = i === 0 ? -1 : BOUNDARIES[i - 1];
+        const endBoundary = i === n - 1 ? 2 : BOUNDARIES[i];
 
-      if (fraction === 0) {
-        c1.style.filter = "none";
-        c1.style.opacity = "1";
-        c2.style.filter = "none";
-        c2.style.opacity = "0";
-      } else if (fraction === 1) {
-        c1.style.filter = "none";
-        c1.style.opacity = "0";
-        c2.style.filter = "none";
-        c2.style.opacity = "1";
-      } else {
-        const inv = 1 - fraction;
-        c1.style.filter = `blur(${Math.min(8 / inv - 8, 100)}px)`;
-        c1.style.opacity = String(Math.pow(inv, 0.4));
-        c2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
-        c2.style.opacity = String(Math.pow(fraction, 0.4));
+        const startBegin = i === 0 ? -1 : startBoundary - FADE_HALF;
+        const startEnd = i === 0 ? -1 : startBoundary + FADE_HALF;
+        const endBegin = i === n - 1 ? 2 : endBoundary - FADE_HALF;
+        const endEnd = i === n - 1 ? 2 : endBoundary + FADE_HALF;
+
+        const stableStart = i === 0 ? 0 : startEnd;
+        const stableEnd = i === n - 1 ? 1 : endBegin;
+        const stableSpan = Math.max(0.0001, stableEnd - stableStart);
+
+        let opacity: number;
+        let y: number;
+
+        if (progress < startBegin) {
+          opacity = 0;
+          y = -SLIDE_DISTANCE;
+        } else if (progress < startEnd) {
+          const raw = (progress - startBegin) / (startEnd - startBegin);
+          const t = smoothstep(raw);
+          opacity = t;
+          y = -SLIDE_DISTANCE + t * SLIDE_DISTANCE;
+        } else if (progress < endBegin) {
+          const raw = (progress - stableStart) / stableSpan;
+          const t = smoothstep(Math.max(0, Math.min(1, raw)));
+          opacity = 1;
+          y = t * DRIFT_DISTANCE;
+        } else if (progress < endEnd) {
+          const raw = (progress - endBegin) / (endEnd - endBegin);
+          const t = smoothstep(raw);
+          opacity = 1 - t;
+          y = DRIFT_DISTANCE + t * SLIDE_DISTANCE;
+        } else {
+          opacity = 0;
+          y = DRIFT_DISTANCE + SLIDE_DISTANCE;
+        }
+
+        el.style.opacity = String(opacity);
+        el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
       }
     };
-
     const onScroll = () => {
       if (rafId) return;
       rafId = requestAnimationFrame(update);
@@ -160,72 +187,106 @@ export default function About() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-black"
-      style={{ height: "300vh" }}
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        <div
-          className="absolute -left-40 top-[6%] h-[650px] w-[650px] rounded-full opacity-35"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(201,163,106,0.85) 0%, transparent 62%)",
-            filter: "blur(110px)",
-          }}
-        />
-        <div
-          className="absolute -right-40 bottom-[8%] h-[780px] w-[780px] rounded-full opacity-40"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(139,42,31,0.9) 0%, transparent 62%)",
-            filter: "blur(130px)",
-          }}
-        />
-        <div className="absolute inset-0 bg-black/50" />
-      </div>
-
-      <div className="sticky top-0 z-10 flex h-screen flex-col overflow-hidden">
-        <div className="relative py-8 md:py-10">
-          <Marquee items={ARTISTS} />
-        </div>
-
-        <div className="relative flex flex-1 items-center justify-center px-6 md:px-10">
+    <section ref={sectionRef} className="relative bg-black">
+      {CHUNKS.map((chunk, i) => {
+        const words = chunk.body.split(" ");
+        if (!wordsRefs.current[i]) wordsRefs.current[i] = [];
+        return (
           <div
-            className="relative mx-auto h-[4.5em] w-full max-w-5xl text-center font-display text-2xl leading-[1.2] text-white md:text-4xl lg:text-[3.25rem] lg:leading-[1.15]"
-            style={{ filter: "url(#about-morph-threshold) blur(0.6px)" }}
+            key={i}
+            className="relative flex min-h-screen items-center overflow-hidden"
+            style={{ backgroundColor: chunk.bg }}
           >
-            <span
-              ref={text1Ref}
-              className="absolute inset-x-0 top-0 inline-block w-full"
-            />
-            <span
-              ref={text2Ref}
-              className="absolute inset-x-0 top-0 inline-block w-full"
-            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+              <div
+                className="absolute rounded-full"
+                style={{
+                  left: chunk.accent.x,
+                  top: chunk.accent.y,
+                  width: chunk.accent.size,
+                  height: chunk.accent.size,
+                  background: `radial-gradient(circle, ${chunk.accent.color} 0%, transparent 62%)`,
+                  filter: "blur(120px)",
+                }}
+              />
+              <div className="absolute inset-0 bg-black/35" />
+            </div>
+
+            <div className="relative w-full px-8 py-24 md:w-[55%] md:px-14 md:py-32 lg:px-20 lg:py-40">
+              <div className="max-w-[720px]">
+                <div className="mb-8 font-sans text-[11px] font-medium tracking-[0.35em] text-white/70 uppercase md:mb-10 md:text-xs">
+                  {chunk.kicker}
+                </div>
+                <p
+                  ref={(el) => {
+                    paraRefs.current[i] = el;
+                  }}
+                  className="font-display text-3xl leading-[1.18] text-white md:text-4xl lg:text-[3rem] lg:leading-[1.12]"
+                >
+                  {words.map((word, wi) => (
+                    <span key={wi}>
+                      <span
+                        ref={(el) => {
+                          wordsRefs.current[i][wi] = el;
+                        }}
+                        style={{
+                          opacity: 0.15,
+                          transition: "opacity 80ms linear",
+                        }}
+                      >
+                        {word}
+                      </span>
+                      {wi < words.length - 1 && " "}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            </div>
           </div>
+        );
+      })}
 
-          <svg aria-hidden="true" className="fixed h-0 w-0">
-            <defs>
-              <filter id="about-morph-threshold">
-                <feColorMatrix
-                  in="SourceGraphic"
-                  type="matrix"
-                  values="1 0 0 0 0
-                          0 1 0 0 0
-                          0 0 1 0 0
-                          0 0 0 255 -140"
+      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[45%] md:block">
+        <div className="sticky top-0 flex h-screen items-center justify-center p-10">
+          <div className="relative h-[min(50vh,440px)] w-[min(38vh,360px)]">
+            {CHUNKS.map((chunk, i) => (
+              <div
+                key={i}
+                ref={(el) => {
+                  assetRefs.current[i] = el;
+                }}
+                className="absolute inset-0"
+                style={{
+                  opacity: i === 0 ? 1 : 0,
+                  willChange: "opacity, transform",
+                }}
+              >
+                <div
+                  className="absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{
+                    background: `radial-gradient(circle, ${chunk.glow} 0%, transparent 62%)`,
+                    filter: "blur(70px)",
+                  }}
                 />
-              </filter>
-            </defs>
-          </svg>
-        </div>
-
-        <div className="relative py-8 md:py-10">
-          <Marquee items={TAGS} reverse />
+                <div
+                  className={`relative h-full w-full ${
+                    chunk.ambient === "spin" ? "asset-spin" : "asset-float"
+                  }`}
+                >
+                  <Image
+                    src={chunk.asset}
+                    alt=""
+                    fill
+                    sizes="360px"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

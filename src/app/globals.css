@@ -35,6 +35,27 @@ body {
   animation-play-state: paused;
 }
 
+@keyframes asset-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  33%      { transform: translate3d(0, -7px, 0) rotate(0.8deg); }
+  66%      { transform: translate3d(0, 7px, 0) rotate(-0.8deg); }
+}
+
+@keyframes asset-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.asset-float {
+  animation: asset-float 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.asset-spin {
+  animation: asset-spin 22s linear infinite;
+  will-change: transform;
+}
+
 @keyframes noise-shift {
   0%   { background-position: 0 0; }
   16%  { background-position: -58px 34px; }
