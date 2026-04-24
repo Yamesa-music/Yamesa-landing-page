@@ -57,11 +57,11 @@ export default function Hero() {
         <h1 className="font-display text-[clamp(3.5rem,16vw,22rem)] font-black uppercase leading-[0.88] tracking-[-0.02em] text-white whitespace-nowrap select-none md:text-[min(16vw,28vh,22rem)]">
           Yamesa
         </h1>
-        <p className="mt-[2vh] font-display italic text-white/85 text-base md:mt-[2.5vh] md:text-xl lg:text-[1.75rem]">
-          Music found, not fed.
+        <p className="mt-[2vh] whitespace-nowrap font-display italic text-white/85 text-sm md:mt-[2.5vh] md:text-xl lg:text-[1.6rem]">
+          For those who listen with intention, not impulse.
         </p>
-        <div className="mt-[1.5vh] font-sans text-[11px] font-medium tracking-[0.4em] text-white/65 uppercase md:mt-[2vh] md:text-xs">
-          Coming Soon
+        <div className="mx-auto mt-[3.5vh] w-fit whitespace-nowrap rounded-full border border-white/25 px-4 py-1.5 font-sans text-[10px] font-medium tracking-[0.3em] text-white/85 uppercase md:mt-[4.5vh] md:px-5 md:py-2 md:text-xs">
+          Discovery Redefined Beyond The Algorithm
         </div>
       </div>
 
