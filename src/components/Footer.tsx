@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
 
 export default function Footer() {
@@ -165,8 +166,21 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="px-4 pb-6 md:px-8 md:pb-8 lg:px-12">
-        <h2 className="select-none font-display text-[min(20vw,42vh,20rem)] font-bold leading-[0.82] tracking-[-0.03em] text-white">
+      <div className="relative px-4 pb-6 md:px-8 md:pb-8 lg:px-12">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-[4vw] top-1/2 hidden w-[min(40vh,380px)] -translate-y-1/2 opacity-45 md:block"
+        >
+          <Image
+            src="/logos/white-logo-bg-less.png"
+            alt=""
+            width={400}
+            height={400}
+            sizes="200px"
+            className="h-auto w-full object-contain"
+          />
+        </div>
+        <h2 className="relative z-10 select-none font-display text-[min(20vw,42vh,20rem)] font-bold leading-[0.82] tracking-[-0.03em] text-white">
           Yamesa
         </h2>
       </div>
