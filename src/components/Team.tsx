@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
+import DistortionImage from "./DistortionImage";
 
 type Person = {
   name: string;
@@ -102,6 +102,12 @@ export default function Team() {
       const half = seg / 2;
       const tw = TRANSITION_WIDTH;
 
+      let topIdx = 0;
+      let topOp = -1;
+      const opacities: number[] = [];
+      const transitionTs: number[] = [];
+      const signedDs: number[] = [];
+
       slideRefs.current.forEach((el, i) => {
         if (!el) return;
         const center = (i + 0.5) * seg;
@@ -121,19 +127,36 @@ export default function Team() {
           opacity = 0;
           transitionT = 0;
         }
+        opacity = Math.max(0, Math.min(1, opacity));
+        opacities[i] = opacity;
+        transitionTs[i] = transitionT;
+        signedDs[i] = signed;
 
-        const blur = transitionT * 5;
-        const contrast = 1 + transitionT * 0.25;
-        const scale = 1 - transitionT * 0.04;
-        const rotation = (signed < 0 ? 1 : -1) * transitionT * 3;
+        if (opacity > topOp) {
+          topOp = opacity;
+          topIdx = i;
+        }
+      });
 
-        el.style.opacity = String(Math.max(0, Math.min(1, opacity)));
-        el.style.filter = `blur(${blur.toFixed(2)}px) contrast(${contrast.toFixed(
-          3
-        )})`;
-        el.style.transform = `scale(${scale.toFixed(4)}) rotate(${rotation.toFixed(
-          3
-        )}deg)`;
+      slideRefs.current.forEach((el, i) => {
+        if (!el) return;
+        el.style.opacity = String(opacities[i]);
+        el.style.pointerEvents = i === topIdx ? "auto" : "none";
+
+        const isLast = i === TEAM.length - 1;
+        if (isLast) {
+          el.style.filter = "none";
+          el.style.transform = "none";
+        } else {
+          const transitionT = transitionTs[i];
+          const signed = signedDs[i];
+          const blur = transitionT * 5;
+          const contrast = 1 + transitionT * 0.25;
+          const scale = 1 - transitionT * 0.04;
+          const rotation = (signed < 0 ? 1 : -1) * transitionT * 3;
+          el.style.filter = `blur(${blur.toFixed(2)}px) contrast(${contrast.toFixed(3)})`;
+          el.style.transform = `scale(${scale.toFixed(4)}) rotate(${rotation.toFixed(3)}deg)`;
+        }
       });
 
       let noiseOpacity = 0;
@@ -179,32 +202,26 @@ export default function Team() {
             className="absolute inset-0"
             style={{
               opacity: i === 0 ? 1 : 0,
+              pointerEvents: i === 0 ? "auto" : "none",
               willChange: "opacity, transform, filter",
             }}
           >
-            <div className="absolute inset-0 bg-neutral-900" />
-            <Image
-              src={person.image}
-              alt={person.name}
-              fill
-              priority={i === 0}
-              sizes="100vw"
-              className="object-cover object-center"
-            />
+            <div className="pointer-events-none absolute inset-0 bg-neutral-900" />
+            <DistortionImage src={person.image} alt={person.name} />
 
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
 
-            <div className="absolute left-8 top-8 font-sans text-[11px] font-medium tracking-[0.35em] text-white/90 uppercase md:left-14 md:top-10 md:text-xs">
+            <div className="pointer-events-none absolute left-8 top-8 font-sans text-[11px] font-medium tracking-[0.35em] text-white/90 uppercase md:left-14 md:top-10 md:text-xs">
               {person.name}
             </div>
 
-            <div className="absolute right-8 top-8 font-sans text-[11px] font-medium tracking-[0.3em] text-white/70 uppercase md:right-14 md:top-10 md:text-xs">
+            <div className="pointer-events-none absolute right-8 top-8 font-sans text-[11px] font-medium tracking-[0.3em] text-white/70 uppercase md:right-14 md:top-10 md:text-xs">
               {String(i + 1).padStart(2, "0")} /{" "}
               {String(TEAM.length).padStart(2, "0")}
             </div>
 
-            <div className="absolute bottom-12 left-8 max-w-[640px] md:bottom-16 md:left-14 lg:bottom-20 lg:left-20">
+            <div className="pointer-events-none absolute bottom-12 left-8 max-w-[640px] md:bottom-16 md:left-14 lg:bottom-20 lg:left-20">
               <div className="mb-4 font-sans text-[11px] font-medium tracking-[0.35em] text-white/70 uppercase md:mb-5 md:text-xs">
                 {person.role}
               </div>
