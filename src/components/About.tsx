@@ -2,22 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
-const BEATS = [
-  {
-    kicker: "Not Every Artist Gets Heard.",
-    body:
-      "streaming runs on scale. the biggest artists get bigger, the rest disappear into a long tail no one scrolls past. discovery, as it exists today, isn't discovery. it's suggestion.",
-  },
-  {
-    kicker: "Curation, Not Computation.",
-    body:
-      "every artist on Yamesa is vetted, not matched. no payola, no algorithm steering, no feed designed to keep you scrolling past the music. real people, listening to real music, betting on who's next.",
-  },
-  {
-    kicker: "Hear It First.",
-    body:
-      "the artists you find here haven't been validated by a chart yet. you're not catching up to someone else's taste. you're hearing them first. so is everyone else.",
-  },
+const CHUNKS = [
+  "Streaming scaled on volume, not on taste. Most artists never made it past the algorithm.",
+  "Yamesa is curated music discovery. Every artist is handpicked by real ears, not ranked by plays.",
+  "Hear tomorrow's favorites before the charts do. No payola, no autoplay, no algorithm in the way.",
 ];
 
 const ARTISTS = [
@@ -58,27 +46,6 @@ const TAGS = [
   "SHILLONG",
   "GOA",
 ];
-
-type FadeWindow = {
-  in0: number;
-  in1: number;
-  out0: number;
-  out1: number;
-};
-
-const FADE_WINDOWS: FadeWindow[] = [
-  { in0: 0,    in1: 0,    out0: 0.30, out1: 0.42 },
-  { in0: 0.30, in1: 0.42, out0: 0.60, out1: 0.72 },
-  { in0: 0.60, in1: 0.72, out0: 999,  out1: 999  },
-];
-
-function chunkOpacity(p: number, w: FadeWindow) {
-  if (p < w.in0) return 0;
-  if (p < w.in1) return (p - w.in0) / Math.max(0.0001, w.in1 - w.in0);
-  if (p < w.out0) return 1;
-  if (p < w.out1) return 1 - (p - w.out0) / Math.max(0.0001, w.out1 - w.out0);
-  return 0;
-}
 
 function Marquee({
   items,
@@ -126,7 +93,8 @@ function Marquee({
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null);
-  const chunkRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const text1Ref = useRef<HTMLSpanElement>(null);
+  const text2Ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -135,18 +103,48 @@ export default function About() {
     let rafId = 0;
     const update = () => {
       rafId = 0;
+      const c1 = text1Ref.current;
+      const c2 = text2Ref.current;
+      if (!c1 || !c2) return;
+
       const rect = section.getBoundingClientRect();
       const vh = window.innerHeight;
       const total = Math.max(1, rect.height - vh);
       const scrolled = -rect.top;
-      const p = Math.max(0, Math.min(1, scrolled / total));
+      const progress = Math.max(0, Math.min(1, scrolled / total));
 
-      for (let i = 0; i < chunkRefs.current.length; i++) {
-        const el = chunkRefs.current[i];
-        if (!el) continue;
-        el.style.opacity = String(chunkOpacity(p, FADE_WINDOWS[i]));
+      const segments = CHUNKS.length - 1;
+      const scaled = Math.min(progress * segments, segments - 0.0001);
+      const segIdx = Math.floor(scaled);
+      const localProgress = scaled - segIdx;
+
+      let fraction: number;
+      if (localProgress < 0.25) fraction = 0;
+      else if (localProgress > 0.75) fraction = 1;
+      else fraction = (localProgress - 0.25) / 0.5;
+
+      c1.textContent = CHUNKS[segIdx] ?? "";
+      c2.textContent = CHUNKS[segIdx + 1] ?? "";
+
+      if (fraction === 0) {
+        c1.style.filter = "none";
+        c1.style.opacity = "1";
+        c2.style.filter = "none";
+        c2.style.opacity = "0";
+      } else if (fraction === 1) {
+        c1.style.filter = "none";
+        c1.style.opacity = "0";
+        c2.style.filter = "none";
+        c2.style.opacity = "1";
+      } else {
+        const inv = 1 - fraction;
+        c1.style.filter = `blur(${Math.min(8 / inv - 8, 100)}px)`;
+        c1.style.opacity = String(Math.pow(inv, 0.4));
+        c2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
+        c2.style.opacity = String(Math.pow(fraction, 0.4));
       }
     };
+
     const onScroll = () => {
       if (rafId) return;
       rafId = requestAnimationFrame(update);
@@ -196,27 +194,34 @@ export default function About() {
         </div>
 
         <div className="relative flex flex-1 items-center justify-center px-6 md:px-10">
-          {BEATS.map((beat, i) => (
-            <div
-              key={i}
-              ref={(el) => {
-                chunkRefs.current[i] = el;
-              }}
-              className="absolute inset-0 flex flex-col items-center justify-center text-center"
-              style={{
-                opacity: i === 0 ? 1 : 0,
-                transition: "opacity 140ms linear",
-                willChange: "opacity",
-              }}
-            >
-              <div className="mb-6 font-sans text-[11px] font-medium tracking-[0.35em] text-white/75 uppercase md:mb-8 md:text-xs">
-                {beat.kicker}
-              </div>
-              <p className="max-w-4xl font-display text-2xl leading-[1.22] text-white md:text-4xl md:leading-[1.18] lg:text-5xl lg:leading-[1.15]">
-                {beat.body}
-              </p>
-            </div>
-          ))}
+          <div
+            className="relative mx-auto h-[4.5em] w-full max-w-5xl text-center font-display text-2xl leading-[1.2] text-white md:text-4xl lg:text-[3.25rem] lg:leading-[1.15]"
+            style={{ filter: "url(#about-morph-threshold) blur(0.6px)" }}
+          >
+            <span
+              ref={text1Ref}
+              className="absolute inset-x-0 top-0 inline-block w-full"
+            />
+            <span
+              ref={text2Ref}
+              className="absolute inset-x-0 top-0 inline-block w-full"
+            />
+          </div>
+
+          <svg aria-hidden="true" className="fixed h-0 w-0">
+            <defs>
+              <filter id="about-morph-threshold">
+                <feColorMatrix
+                  in="SourceGraphic"
+                  type="matrix"
+                  values="1 0 0 0 0
+                          0 1 0 0 0
+                          0 0 1 0 0
+                          0 0 0 255 -140"
+                />
+              </filter>
+            </defs>
+          </svg>
         </div>
 
         <div className="relative py-8 md:py-10">
