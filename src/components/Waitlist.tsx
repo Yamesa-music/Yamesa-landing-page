@@ -37,7 +37,7 @@ export default function Waitlist() {
 
         {submitted ? (
           <div className="mt-10 font-sans text-sm tracking-[0.18em] text-white/90 uppercase">
-            You&apos;re on the list.
+            You&apos;re on the role.
           </div>
         ) : (
           <form
