@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Waitlist from "@/components/Waitlist";
+import Team from "@/components/Team";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <About />
       <Waitlist />
+      <Team />
     </main>
   );
 }
