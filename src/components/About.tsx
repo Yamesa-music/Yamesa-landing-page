@@ -1,291 +1,118 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 
-type Chunk = {
-  kicker: string;
-  body: string;
-  asset: string;
-  ambient: "float" | "spin";
-  bg: string;
-  accent: { color: string; x: string; y: string; size: string };
-  glow: string;
-};
+const KICKER = "Not Every Artist Gets Heard.";
 
-const CHUNKS: Chunk[] = [
-  {
-    kicker: "The Platform",
-    body:
-      "Yamesa is a curated platform for the music the algorithm keeps quiet. Real ears, real taste, real artists. No payola, no autoplay, no feed optimized to keep you scrolling past the music.",
-    asset: "/logos/white-logo-bg-less.png",
-    ambient: "float",
-    bg: "#0B0707",
-    accent: {
-      color: "rgba(201, 163, 106, 0.28)",
-      x: "-10%",
-      y: "20%",
-      size: "620px",
-    },
-    glow: "rgba(201, 163, 106, 0.22)",
-  },
-  {
-    kicker: "The Feed",
-    body:
-      "Scroll through short reels of music you've never heard. Every artist is handpicked, every track chosen by real listeners. Discovery that actually discovers, one reel at a time.",
-    asset: "/reel-asset-bg-less.png",
-    ambient: "float",
-    bg: "#170A0A",
-    accent: {
-      color: "rgba(176, 36, 36, 0.32)",
-      x: "-12%",
-      y: "55%",
-      size: "720px",
-    },
-    glow: "rgba(196, 46, 38, 0.24)",
-  },
-  {
-    kicker: "The Listen",
-    body:
-      "Press play and keep going. Yamesa runs in the background of your phone, your day, your commute. Discover, save, and stream while your phone does everything else.",
-    asset: "/vinyl-bg-less.png",
-    ambient: "spin",
-    bg: "#110B06",
-    accent: {
-      color: "rgba(201, 163, 106, 0.36)",
-      x: "-8%",
-      y: "30%",
-      size: "680px",
-    },
-    glow: "rgba(211, 150, 70, 0.22)",
-  },
+const PARAGRAPHS = [
+  "Yamesa is a curated platform for the music the algorithm keeps quiet. Real ears, real taste, real artists. No payola, no autoplay.",
+  "Scroll through short reels of music you've never heard. Every artist is handpicked, every track chosen by real listeners. Discovery that actually discovers, one reel at a time.",
+  "Press play and keep going. Yamesa runs in the background of your phone, your day, your commute. Discover, save, and stream while your phone does everything else.",
 ];
 
-const FADE_HALF = 0.06;
-const SLIDE_DISTANCE = 48;
-const DRIFT_DISTANCE = 140;
-const BOUNDARIES = [0.33, 0.66];
-
-function smoothstep(t: number): number {
-  const x = Math.max(0, Math.min(1, t));
-  return x * x * (3 - 2 * x);
-}
-
 export default function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const paraRefs = useRef<(HTMLParagraphElement | null)[]>([]);
-  const wordsRefs = useRef<(HTMLSpanElement | null)[][]>(
-    CHUNKS.map(() => [])
-  );
-  const assetRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const containerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    let rafId = 0;
-    const update = () => {
-      rafId = 0;
-      const vh = window.innerHeight;
+    gsap.registerPlugin(ScrollTrigger, SplitText);
 
-      const REVEAL_START = vh * 0.82;
-      const REVEAL_END = vh * 0.4;
-      const span = REVEAL_START - REVEAL_END;
-      const LINE_STAGGER = 110;
+    let ctx: gsap.Context | undefined;
 
-      for (let i = 0; i < CHUNKS.length; i++) {
-        const para = paraRefs.current[i];
-        if (!para) continue;
-        const paraRect = para.getBoundingClientRect();
-        const paraLeft = paraRect.left;
-        const paraWidth = Math.max(1, paraRect.width);
-        const words = wordsRefs.current[i];
-        for (const el of words) {
-          if (!el) continue;
-          const rect = el.getBoundingClientRect();
-          const xFrac = Math.max(
-            0,
-            Math.min(1, (rect.left - paraLeft) / paraWidth)
-          );
-          const effectiveY = rect.top + xFrac * LINE_STAGGER;
-          let opacity: number;
-          if (effectiveY <= REVEAL_END) opacity = 1;
-          else if (effectiveY >= REVEAL_START) opacity = 0.15;
-          else {
-            const raw = (REVEAL_START - effectiveY) / span;
-            opacity = 0.15 + smoothstep(raw) * 0.85;
-          }
-          el.style.opacity = String(opacity);
-        }
-      }
+    const init = () => {
+      ctx = gsap.context(() => {
+        const paragraphs =
+          container.querySelectorAll<HTMLElement>(".about-text");
+        const splits: SplitText[] = [];
 
-      const rect = section.getBoundingClientRect();
-      const total = Math.max(1, rect.height - vh);
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / total));
+        paragraphs.forEach((p) => {
+          const split = SplitText.create(p, {
+            type: "lines",
+            linesClass: "about-line",
+          });
+          splits.push(split);
 
-      const n = CHUNKS.length;
+          split.lines.forEach((line) => {
+            gsap.to(line, {
+              backgroundPositionX: 0,
+              ease: "none",
+              scrollTrigger: {
+                trigger: line as HTMLElement,
+                scrub: true,
+                start: "top 70%",
+                end: "top 45%",
+              },
+            });
+          });
+        });
 
-      for (let i = 0; i < n; i++) {
-        const el = assetRefs.current[i];
-        if (!el) continue;
-
-        const startBoundary = i === 0 ? -1 : BOUNDARIES[i - 1];
-        const endBoundary = i === n - 1 ? 2 : BOUNDARIES[i];
-
-        const startBegin = i === 0 ? -1 : startBoundary - FADE_HALF;
-        const startEnd = i === 0 ? -1 : startBoundary + FADE_HALF;
-        const endBegin = i === n - 1 ? 2 : endBoundary - FADE_HALF;
-        const endEnd = i === n - 1 ? 2 : endBoundary + FADE_HALF;
-
-        const stableStart = i === 0 ? 0 : startEnd;
-        const stableEnd = i === n - 1 ? 1 : endBegin;
-        const stableSpan = Math.max(0.0001, stableEnd - stableStart);
-
-        let opacity: number;
-        let y: number;
-
-        if (progress < startBegin) {
-          opacity = 0;
-          y = -SLIDE_DISTANCE;
-        } else if (progress < startEnd) {
-          const raw = (progress - startBegin) / (startEnd - startBegin);
-          const t = smoothstep(raw);
-          opacity = t;
-          y = -SLIDE_DISTANCE + t * SLIDE_DISTANCE;
-        } else if (progress < endBegin) {
-          const raw = (progress - stableStart) / stableSpan;
-          const t = smoothstep(Math.max(0, Math.min(1, raw)));
-          opacity = 1;
-          y = t * DRIFT_DISTANCE;
-        } else if (progress < endEnd) {
-          const raw = (progress - endBegin) / (endEnd - endBegin);
-          const t = smoothstep(raw);
-          opacity = 1 - t;
-          y = DRIFT_DISTANCE + t * SLIDE_DISTANCE;
-        } else {
-          opacity = 0;
-          y = DRIFT_DISTANCE + SLIDE_DISTANCE;
-        }
-
-        el.style.opacity = String(opacity);
-        el.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
-      }
+        return () => {
+          splits.forEach((s) => s.revert());
+        };
+      }, container);
     };
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(init);
+    } else {
+      init();
+    }
+
+    return () => ctx?.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-black">
-      {CHUNKS.map((chunk, i) => {
-        const words = chunk.body.split(" ");
-        if (!wordsRefs.current[i]) wordsRefs.current[i] = [];
-        return (
-          <div
-            key={i}
-            className="relative flex min-h-screen items-center overflow-hidden"
-            style={{ backgroundColor: chunk.bg }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 overflow-hidden"
-            >
-              <div
-                className="absolute rounded-full"
-                style={{
-                  left: chunk.accent.x,
-                  top: chunk.accent.y,
-                  width: chunk.accent.size,
-                  height: chunk.accent.size,
-                  background: `radial-gradient(circle, ${chunk.accent.color} 0%, transparent 62%)`,
-                  filter: "blur(120px)",
-                }}
-              />
-              <div className="absolute inset-0 bg-black/35" />
+    <section
+      ref={containerRef}
+      className="relative overflow-hidden bg-black"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ transform: "translateZ(0)" }}
+      >
+        <div
+          className="absolute -left-[10%] top-[20%] h-[560px] w-[560px] rounded-full opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(201,163,106,0.22) 0%, transparent 62%)",
+            filter: "blur(90px)",
+            transform: "translateZ(0)",
+          }}
+        />
+        <div
+          className="absolute -right-[12%] top-[62%] h-[640px] w-[640px] rounded-full opacity-40"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(176,36,36,0.22) 0%, transparent 62%)",
+            filter: "blur(95px)",
+            transform: "translateZ(0)",
+          }}
+        />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-7xl px-6 pt-[10vh] pb-[18vh] md:px-12 md:pt-[12vh] md:pb-[22vh] lg:px-20 lg:pt-[14vh] lg:pb-[26vh]">
+        <div className="md:ml-[14%] lg:ml-[22%]">
+          <div className="max-w-[640px]">
+            <div className="mb-14 font-sans text-[10px] font-semibold tracking-[0.32em] text-[#EDEDED] uppercase md:mb-20 md:text-[11px]">
+              {KICKER}
             </div>
 
-            <div className="relative w-full px-8 py-24 md:w-[55%] md:px-14 md:py-32 lg:px-20 lg:py-40">
-              <div className="max-w-[720px]">
-                <div className="mb-8 font-sans text-[11px] font-medium tracking-[0.35em] text-white/70 uppercase md:mb-10 md:text-xs">
-                  {chunk.kicker}
-                </div>
+            <div className="space-y-12 md:space-y-16 lg:space-y-20">
+              {PARAGRAPHS.map((paragraph, i) => (
                 <p
-                  ref={(el) => {
-                    paraRefs.current[i] = el;
-                  }}
-                  className="font-display text-3xl leading-[1.18] text-white md:text-4xl lg:text-[3rem] lg:leading-[1.12]"
+                  key={i}
+                  className="about-text font-display font-normal tracking-[-0.012em] text-[#EDEDED] text-[1.75rem] leading-[1.25] md:text-[2.5rem] md:leading-[1.18] lg:text-[3.25rem] lg:leading-[1.12]"
                 >
-                  {words.map((word, wi) => (
-                    <span key={wi}>
-                      <span
-                        ref={(el) => {
-                          wordsRefs.current[i][wi] = el;
-                        }}
-                        style={{
-                          opacity: 0.15,
-                          transition: "opacity 80ms linear",
-                        }}
-                      >
-                        {word}
-                      </span>
-                      {wi < words.length - 1 && " "}
-                    </span>
-                  ))}
+                  {paragraph}
                 </p>
-              </div>
+              ))}
             </div>
-          </div>
-        );
-      })}
-
-      <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[45%] md:block">
-        <div className="sticky top-0 flex h-screen items-center justify-center p-10">
-          <div className="relative h-[min(50vh,440px)] w-[min(38vh,360px)]">
-            {CHUNKS.map((chunk, i) => (
-              <div
-                key={i}
-                ref={(el) => {
-                  assetRefs.current[i] = el;
-                }}
-                className="absolute inset-0"
-                style={{
-                  opacity: i === 0 ? 1 : 0,
-                  willChange: "opacity, transform",
-                }}
-              >
-                <div
-                  className="absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                  style={{
-                    background: `radial-gradient(circle, ${chunk.glow} 0%, transparent 62%)`,
-                    filter: "blur(70px)",
-                  }}
-                />
-                <div
-                  className={`relative h-full w-full ${
-                    chunk.ambient === "spin" ? "asset-spin" : "asset-float"
-                  }`}
-                >
-                  <Image
-                    src={chunk.asset}
-                    alt=""
-                    fill
-                    sizes="360px"
-                    className="object-contain"
-                  />
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </div>

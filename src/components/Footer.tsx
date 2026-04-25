@@ -90,11 +90,13 @@ export default function Footer() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Address mail"
+                suppressHydrationWarning
                 className="flex-1 bg-transparent py-2 text-sm text-white outline-none placeholder:text-white/40"
               />
               <button
                 type="submit"
                 aria-label="Subscribe"
+                suppressHydrationWarning
                 className="ml-3 text-white/60 transition-colors hover:text-white"
               >
                 <svg

@@ -35,6 +35,32 @@ body {
   animation-play-state: paused;
 }
 
+.about-line {
+  background-image: linear-gradient(
+    to right,
+    rgb(237 237 237) 50%,
+    rgb(237 237 237 / 0.28) 50%
+  );
+  background-size: 200% 100%;
+  background-position-x: 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  will-change: background-position;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  overscroll-behavior-y: none;
+}
+
 @keyframes asset-float {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
   33%      { transform: translate3d(0, -7px, 0) rotate(0.8deg); }
