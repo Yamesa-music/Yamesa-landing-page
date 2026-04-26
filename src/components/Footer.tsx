@@ -29,7 +29,39 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden bg-black text-white">
-      <div className="grid grid-cols-2 gap-6 px-8 pt-12 text-sm md:grid-cols-5 md:px-14 md:pt-16 lg:px-20">
+      <div className="px-6 pt-10 text-sm md:hidden">
+        <div className="flex items-center justify-between">
+          <div className="font-sans">Yamesa&reg;</div>
+          <div
+            className="font-sans tabular-nums text-[11px] text-white/55"
+            suppressHydrationWarning
+          >
+            {time ? `${time} Mumbai` : " "}
+          </div>
+        </div>
+        <div className="mt-1.5 font-sans text-white/60">
+          Curated Music Discovery
+        </div>
+        <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 font-sans text-[13px] text-white/60">
+          <a href="#about" className="transition-colors hover:text-white">
+            About
+          </a>
+          <a href="#team" className="transition-colors hover:text-white">
+            Team
+          </a>
+          <a href="#waitlist" className="transition-colors hover:text-white">
+            Waitlist
+          </a>
+          <a
+            href="#waitlist"
+            className="ml-auto text-white transition-colors hover:text-white/70"
+          >
+            Join waitlist →
+          </a>
+        </div>
+      </div>
+
+      <div className="hidden grid-cols-2 gap-6 px-8 pt-12 text-sm md:grid md:grid-cols-5 md:px-14 md:pt-16 lg:px-20">
         <div className="font-sans">Yamesa&reg;</div>
         <div className="font-sans text-white/60">Curated Music Discovery</div>
         <div
@@ -68,9 +100,9 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 items-start gap-10 px-8 pb-6 pt-16 md:grid-cols-3 md:gap-6 md:px-14 md:pb-8 md:pt-20 lg:px-20 lg:pb-10 lg:pt-24">
+      <div className="grid grid-cols-1 items-start gap-12 px-6 pb-6 pt-14 md:grid-cols-3 md:gap-6 md:px-14 md:pb-8 md:pt-20 lg:px-20 lg:pb-10 lg:pt-24">
         <div>
-          <p className="mb-8 font-display text-2xl italic leading-tight md:text-[1.75rem] lg:text-3xl">
+          <p className="mb-6 font-display text-[1.625rem] italic leading-tight md:mb-8 md:text-[1.75rem] lg:text-3xl">
             Subscribe to our
             <br />
             newsletter

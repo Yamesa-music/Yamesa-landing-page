@@ -17,7 +17,7 @@ export default function Waitlist() {
   }
 
   return (
-    <section id="waitlist" className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black px-4">
+    <section id="waitlist" className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-black px-6 md:min-h-screen md:px-4">
       <Image
         src="/download (2).webp"
         alt=""
@@ -30,11 +30,11 @@ export default function Waitlist() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
 
       <div className="relative z-10 flex w-full max-w-xl flex-col items-center text-center">
-        <div className="font-sans text-[11px] font-medium tracking-[0.4em] text-white/85 uppercase md:text-xs">
+        <div className="font-sans text-[10px] font-medium tracking-[0.36em] text-white/85 uppercase md:text-xs md:tracking-[0.4em]">
           Join the Waitlist
         </div>
 
-        <p className="mt-5 font-display text-3xl leading-[1.15] text-white md:text-5xl lg:text-[3.5rem]">
+        <p className="mt-5 font-display text-[1.875rem] leading-[1.15] text-white md:mt-5 md:text-5xl lg:text-[3.5rem]">
           Be first to hear what you&apos;ve been missing.
         </p>
 
@@ -67,7 +67,7 @@ export default function Waitlist() {
                 role="radio"
                 aria-checked={role === "listener"}
                 onClick={() => setRole("listener")}
-                className={`relative z-10 flex-1 rounded-full px-5 py-2 font-sans text-[11px] font-medium tracking-[0.18em] uppercase transition-colors duration-300 md:text-xs ${
+                className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 font-sans text-[10px] font-medium tracking-[0.16em] uppercase transition-colors duration-300 md:py-2 md:text-xs md:tracking-[0.18em] ${
                   role === "listener" ? "text-black" : "text-white/75"
                 }`}
               >
@@ -78,7 +78,7 @@ export default function Waitlist() {
                 role="radio"
                 aria-checked={role === "creator"}
                 onClick={() => setRole("creator")}
-                className={`relative z-10 flex-1 rounded-full px-5 py-2 font-sans text-[11px] font-medium tracking-[0.18em] uppercase transition-colors duration-300 md:text-xs ${
+                className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 font-sans text-[10px] font-medium tracking-[0.16em] uppercase transition-colors duration-300 md:py-2 md:text-xs md:tracking-[0.18em] ${
                   role === "creator" ? "text-black" : "text-white/75"
                 }`}
               >
@@ -97,12 +97,12 @@ export default function Waitlist() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email"
                 suppressHydrationWarning
-                className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder:text-white/55 outline-none md:px-5"
+                className="min-w-0 flex-1 bg-transparent px-4 py-3 text-base text-white placeholder:text-white/55 outline-none md:px-5 md:py-2 md:text-sm"
               />
               <button
                 type="submit"
                 suppressHydrationWarning
-                className="shrink-0 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-black transition hover:bg-white/85 md:px-6 md:text-[11px] md:tracking-[0.18em]"
+                className="shrink-0 whitespace-nowrap rounded-full bg-white px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-black transition hover:bg-white/85 md:px-6 md:py-2.5 md:text-[11px] md:tracking-[0.18em]"
               >
                 Notify Me
               </button>

@@ -82,7 +82,7 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="relative overflow-hidden bg-black">
-      <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-[6vh] pb-[1vh]">
+      <div className="relative flex min-h-dvh flex-col items-center justify-center overflow-hidden px-2 pt-[6vh] pb-[1vh] md:min-h-screen md:px-4">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -136,7 +136,7 @@ export default function Hero() {
           />
         </div>
 
-        <h1 className="relative z-10 font-display font-black uppercase leading-[0.9] tracking-[-0.02em] text-white whitespace-nowrap select-none text-[min(30vw,32vh,26rem)]">
+        <h1 className="relative z-10 font-display font-black uppercase leading-[0.9] tracking-[-0.02em] text-white whitespace-nowrap select-none text-[24vw] md:text-[min(30vw,32vh,26rem)]">
           Yamesa
         </h1>
 
@@ -187,12 +187,15 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative flex flex-col items-start justify-center px-6 pt-4 pb-16 md:px-14 md:py-20 lg:px-20">
-          <p className="font-display italic text-white/90 text-xl leading-[1.2] md:text-3xl lg:text-[2.25rem] lg:leading-[1.15]">
+        <div className="relative flex flex-col items-center justify-center px-6 pt-2 pb-14 text-center md:items-start md:px-14 md:py-20 md:text-left lg:px-20">
+          <p className="font-display italic text-white/90 text-[1.35rem] leading-[1.22] md:text-3xl lg:text-[2.25rem] lg:leading-[1.15]">
             For those who listen with intention, not impulse.
           </p>
-          <div className="mt-6 w-fit max-w-full rounded-full border border-white/25 px-4 py-2 font-sans text-[10px] font-medium tracking-[0.28em] text-white/85 uppercase md:mt-10 md:whitespace-nowrap md:px-5 md:text-xs md:tracking-[0.32em]">
-            Discovery Redefined Beyond The Algorithm
+          <div className="mt-5 w-fit max-w-full rounded-full border border-white/25 px-4 py-2 font-sans text-[9px] font-medium tracking-[0.24em] text-white/85 uppercase md:mt-10 md:whitespace-nowrap md:px-5 md:text-xs md:tracking-[0.32em]">
+            <span className="md:hidden">Beyond The Algorithm</span>
+            <span className="hidden md:inline">
+              Discovery Redefined Beyond The Algorithm
+            </span>
           </div>
         </div>
       </div>

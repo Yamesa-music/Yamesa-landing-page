@@ -273,11 +273,11 @@ function Pill({
 
 function MobileStack() {
   return (
-    <div className="flex flex-col gap-4 px-4 md:hidden">
+    <div className="flex flex-col gap-5 px-5 md:hidden">
       {TEAM.map((person, i) => (
         <div
           key={person.name}
-          className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem]"
+          className="relative aspect-[5/7] overflow-hidden rounded-[1.5rem]"
         >
           <Image
             src={person.image}
@@ -291,25 +291,22 @@ function MobileStack() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 100%)",
+                "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 22%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.35) 100%)",
             }}
           />
-          <div className="absolute inset-x-0 top-0 flex items-start justify-between p-5">
-            <span className="font-sans text-[10px] font-medium tracking-[0.3em] text-white/85 uppercase">
-              {person.name.split(" ")[0]}
-            </span>
-            <span className="font-sans text-[10px] font-medium tracking-[0.3em] text-white/55 uppercase">
-              {String(i + 1).padStart(2, "0")}
+          <div className="absolute right-5 top-5">
+            <span className="font-sans text-[10px] font-medium tracking-[0.32em] text-white/55 uppercase">
+              {String(i + 1).padStart(2, "0")} / 03
             </span>
           </div>
-          <div className="absolute inset-x-0 bottom-0 flex flex-col p-6">
-            <div className="mb-2 font-sans text-[10px] font-medium tracking-[0.32em] text-white/70 uppercase">
+          <div className="absolute inset-x-0 bottom-0 flex flex-col px-6 pt-8 pb-7">
+            <div className="mb-2.5 font-sans text-[10px] font-medium tracking-[0.32em] text-[#C9A36A] uppercase">
               {person.role}
             </div>
-            <h3 className="mb-3 font-display text-2xl leading-[1.1] text-white">
+            <h3 className="mb-3 font-display text-[1.625rem] leading-[1.08] text-white">
               {person.name}
             </h3>
-            <p className="mb-5 font-display text-[15px] leading-[1.4] text-white/85">
+            <p className="mb-5 font-display text-[14px] leading-[1.42] text-white/85">
               {person.bio}
             </p>
             <Socials socials={person.socials} name={person.name} />
