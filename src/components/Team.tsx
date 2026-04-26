@@ -26,7 +26,7 @@ const TEAM: Person[] = [
   {
     name: "Mehar Parnami",
     role: "Co-founder & CMO",
-    bio: "I don't market brands I make them impossible to ignore. At Yamesa, I turn vision into culture and attention into obsession",
+    bio: "I don't market brands, I make them impossible to ignore. At Yamesa, I design what people reach for next.",
     image: "/mehar2-img.jpeg",
     socials: {
       x: "#",
