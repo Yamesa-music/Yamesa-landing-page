@@ -12,27 +12,8 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-}
-
-@keyframes marquee-left {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-@keyframes marquee-right {
-  from { transform: translate3d(-50%, 0, 0); }
-  to   { transform: translate3d(0, 0, 0); }
-}
-.marquee-track {
-  animation: marquee-left 55s linear infinite;
-  will-change: transform;
-}
-.marquee-track-reverse {
-  animation: marquee-right 65s linear infinite;
-  will-change: transform;
-}
-.marquee-track:hover,
-.marquee-track-reverse:hover {
-  animation-play-state: paused;
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
 }
 
 .about-line {
@@ -53,41 +34,11 @@ body {
   will-change: background-position;
 }
 
-html {
-  scroll-behavior: auto;
+@media (max-width: 767px) {
+  /* Reduce GPU pressure on phones — large blurred surfaces are the
+     biggest cause of scroll jank on low-end mobile devices. */
+  .about-line {
+    will-change: auto;
+  }
 }
 
-body {
-  overscroll-behavior-y: none;
-}
-
-@keyframes asset-float {
-  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
-  33%      { transform: translate3d(0, -7px, 0) rotate(0.8deg); }
-  66%      { transform: translate3d(0, 7px, 0) rotate(-0.8deg); }
-}
-
-@keyframes asset-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-.asset-float {
-  animation: asset-float 7s ease-in-out infinite;
-  will-change: transform;
-}
-
-.asset-spin {
-  animation: asset-spin 22s linear infinite;
-  will-change: transform;
-}
-
-@keyframes noise-shift {
-  0%   { background-position: 0 0; }
-  16%  { background-position: -58px 34px; }
-  32%  { background-position: 42px -24px; }
-  48%  { background-position: 124px 90px; }
-  64%  { background-position: -96px -68px; }
-  80%  { background-position: 68px 140px; }
-  100% { background-position: -30px 66px; }
-}

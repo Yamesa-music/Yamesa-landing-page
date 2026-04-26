@@ -17,6 +17,14 @@ export default function Hero() {
     let rafId = 0;
     const update = () => {
       rafId = 0;
+
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        travelingBust.style.opacity = "0";
+        zone2Bust.style.opacity = "1";
+        return;
+      }
+
       const rect = section.getBoundingClientRect();
       const vh = window.innerHeight;
       const sectionVisible = rect.bottom > 0 && rect.top < vh;
@@ -73,7 +81,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden bg-black">
+    <section id="hero" ref={sectionRef} className="relative overflow-hidden bg-black">
       <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-[6vh] pb-[1vh]">
         <div
           aria-hidden
@@ -109,7 +117,7 @@ export default function Hero() {
             }}
           />
           <div
-            className="absolute left-[18%] bottom-[6%] h-[32vh] w-[30vw]"
+            className="absolute left-[18%] bottom-[6%] hidden h-[32vh] w-[30vw] md:block"
             style={{
               background:
                 "radial-gradient(ellipse 65% 60% at 55% 45%, rgba(178,44,18,0.3) 0%, rgba(70,16,10,0.13) 55%, transparent 80%)",
@@ -118,7 +126,7 @@ export default function Hero() {
             }}
           />
           <div
-            className="absolute right-[22%] top-[8%] h-[24vh] w-[22vw]"
+            className="absolute right-[22%] top-[8%] hidden h-[24vh] w-[22vw] md:block"
             style={{
               background:
                 "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(160,40,18,0.26) 0%, transparent 72%)",
@@ -134,12 +142,12 @@ export default function Hero() {
 
         <div
           aria-hidden
-          className="invisible relative w-[min(50vw,58vh,720px)] -mt-[min(28vw,24vh)]"
+          className="invisible relative hidden w-[min(50vw,58vh,720px)] -mt-[min(28vw,24vh)] md:block"
           style={{ aspectRatio: "2 / 3" }}
         />
       </div>
 
-      <div className="relative grid min-h-screen grid-cols-1 overflow-hidden md:grid-cols-2">
+      <div className="relative grid grid-cols-1 overflow-hidden md:min-h-screen md:grid-cols-2">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -162,10 +170,10 @@ export default function Hero() {
           />
         </div>
 
-        <div className="relative flex items-center justify-center px-8 py-16 md:py-20">
+        <div className="relative flex items-center justify-center px-6 pt-10 pb-4 md:px-8 md:py-20">
           <div
             ref={zone2BustRef}
-            className="w-[min(48vw,58vh,580px)]"
+            className="w-[min(70vw,55vh,420px)] md:w-[min(48vw,58vh,580px)]"
             style={{ opacity: 0, willChange: "opacity" }}
           >
             <Image
@@ -173,17 +181,17 @@ export default function Hero() {
               alt=""
               width={800}
               height={1200}
-              sizes="580px"
+              sizes="(max-width: 767px) 70vw, 580px"
               className="h-auto w-full object-contain"
             />
           </div>
         </div>
 
-        <div className="relative flex flex-col items-start justify-center px-8 py-16 md:px-14 md:py-20 lg:px-20">
-          <p className="font-display italic text-white/90 text-2xl leading-[1.18] md:text-3xl lg:text-[2.25rem] lg:leading-[1.15]">
+        <div className="relative flex flex-col items-start justify-center px-6 pt-4 pb-16 md:px-14 md:py-20 lg:px-20">
+          <p className="font-display italic text-white/90 text-xl leading-[1.2] md:text-3xl lg:text-[2.25rem] lg:leading-[1.15]">
             For those who listen with intention, not impulse.
           </p>
-          <div className="mt-8 w-fit whitespace-nowrap rounded-full border border-white/25 px-5 py-2 font-sans text-[11px] font-medium tracking-[0.32em] text-white/85 uppercase md:mt-10 md:text-xs">
+          <div className="mt-6 w-fit max-w-full rounded-full border border-white/25 px-4 py-2 font-sans text-[10px] font-medium tracking-[0.28em] text-white/85 uppercase md:mt-10 md:whitespace-nowrap md:px-5 md:text-xs md:tracking-[0.32em]">
             Discovery Redefined Beyond The Algorithm
           </div>
         </div>
@@ -197,7 +205,7 @@ export default function Hero() {
           top: "56%",
           transform: "translate3d(-50%, -50%, 0)",
           opacity: 0,
-          willChange: "left, top, opacity",
+          willChange: "transform, opacity",
         }}
       >
         <Image

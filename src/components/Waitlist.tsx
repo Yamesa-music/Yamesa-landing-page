@@ -17,7 +17,7 @@ export default function Waitlist() {
   }
 
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black px-4">
+    <section id="waitlist" className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black px-4">
       <Image
         src="/download (2).webp"
         alt=""
@@ -88,24 +88,24 @@ export default function Waitlist() {
 
             <form
               onSubmit={onSubmit}
-              className="mt-5 flex items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1.5 backdrop-blur-md"
+              className="mt-5 flex w-full max-w-md items-center gap-1 rounded-full border border-white/25 bg-white/10 p-1.5 backdrop-blur-md"
             >
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Your email"
-              suppressHydrationWarning
-              className="w-56 bg-transparent px-5 py-2 text-sm text-white placeholder:text-white/55 outline-none md:w-72"
-            />
-            <button
-              type="submit"
-              suppressHydrationWarning
-              className="rounded-full bg-white px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-black transition hover:bg-white/85"
-            >
-              Notify Me
-            </button>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email"
+                suppressHydrationWarning
+                className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder:text-white/55 outline-none md:px-5"
+              />
+              <button
+                type="submit"
+                suppressHydrationWarning
+                className="shrink-0 whitespace-nowrap rounded-full bg-white px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-black transition hover:bg-white/85 md:px-6 md:text-[11px] md:tracking-[0.18em]"
+              >
+                Notify Me
+              </button>
             </form>
           </>
         )}

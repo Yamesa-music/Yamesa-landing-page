@@ -1,61 +1,55 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import DistortionImage from "./DistortionImage";
+import Image from "next/image";
+import { useState, type SVGProps } from "react";
 
 type Person = {
   name: string;
   role: string;
   bio: string;
-  images: string[];
-  x: string;
-  linkedin: string;
-  email: string;
+  image: string;
+  socials: { x: string; linkedin: string; email: string };
 };
 
 const TEAM: Person[] = [
   {
     name: "Yash Agrawal",
-    role: "Founder & Curator",
+    role: "Founder & CEO",
     bio: "An indie music obsessive building Yamesa for the artists the algorithm forgets. Raised on mixtapes and small-venue shows, building the platform that was always needed.",
-    images: [
-      "/yash-img.jpeg",
-      "https://picsum.photos/seed/yamesa-yash-2/800/1200",
-      "https://picsum.photos/seed/yamesa-yash-3/800/1200",
-    ],
-    x: "#",
-    linkedin: "#",
-    email: "mailto:yash@yamesa.com",
+    image: "/yash-img.jpeg",
+    socials: {
+      x: "#",
+      linkedin: "#",
+      email: "mailto:yash@yamesa.com",
+    },
   },
   {
     name: "Mehar Parnami",
     role: "Design & Brand",
     bio: "Shaping the visual voice of Yamesa. Believes the best discoveries happen at the intersection of taste and trust, and that every artist deserves a story told well.",
-    images: [
-      "https://picsum.photos/seed/yamesa-mehar-1/800/1200",
-      "https://picsum.photos/seed/yamesa-mehar-2/800/1200",
-      "https://picsum.photos/seed/yamesa-mehar-3/800/1200",
-    ],
-    x: "#",
-    linkedin: "#",
-    email: "mailto:mehar@yamesa.com",
+    image: "/mehar-img.jpeg",
+    socials: {
+      x: "#",
+      linkedin: "#",
+      email: "mailto:mehar@yamesa.com",
+    },
   },
   {
     name: "Sagar Gupta",
     role: "Engineering",
     bio: "Building the infrastructure behind Yamesa's curated feed. Obsessed with making technology serve artists, not the other way around.",
-    images: [
-      "https://picsum.photos/seed/yamesa-sagar-1/800/1200",
-      "https://picsum.photos/seed/yamesa-sagar-2/800/1200",
-      "https://picsum.photos/seed/yamesa-sagar-3/800/1200",
-    ],
-    x: "#",
-    linkedin: "#",
-    email: "mailto:sagar@yamesa.com",
+    image: "/sagar-img.jpeg",
+    socials: {
+      x: "#",
+      linkedin: "#",
+      email: "mailto:sagar@yamesa.com",
+    },
   },
 ];
 
-function XIcon(props: React.SVGProps<SVGSVGElement>) {
+const EASE = "cubic-bezier(0.32, 0.72, 0, 1)";
+
+function XIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -63,7 +57,7 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function LinkedInIcon(props: React.SVGProps<SVGSVGElement>) {
+function LinkedInIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
@@ -71,13 +65,13 @@ function LinkedInIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function MailIcon(props: React.SVGProps<SVGSVGElement>) {
+function MailIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
@@ -89,216 +83,239 @@ function MailIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-const TRANSITION_WIDTH = 0.16;
+function Socials({ socials, name }: { socials: Person["socials"]; name: string }) {
+  return (
+    <div className="flex items-center gap-4">
+      <a
+        href={socials.x}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${name} on X`}
+        className="text-white/65 transition-colors hover:text-white"
+      >
+        <XIcon className="h-[16px] w-[16px]" />
+      </a>
+      <a
+        href={socials.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${name} on LinkedIn`}
+        className="text-white/65 transition-colors hover:text-white"
+      >
+        <LinkedInIcon className="h-[16px] w-[16px]" />
+      </a>
+      <a
+        href={socials.email}
+        aria-label={`Email ${name}`}
+        className="text-white/65 transition-colors hover:text-white"
+      >
+        <MailIcon className="h-[18px] w-[18px]" />
+      </a>
+    </div>
+  );
+}
 
 export default function Team() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const noiseRef = useRef<HTMLDivElement>(null);
+  return (
+    <section id="team" className="relative overflow-hidden bg-black">
+      <div className="px-6 pt-12 pb-10 text-center md:pt-16 md:pb-12 lg:pt-20 lg:pb-16">
+        <div className="mb-3 font-sans text-[10px] font-medium tracking-[0.4em] text-white/60 uppercase md:text-[11px]">
+          The Crew
+        </div>
+        <h2 className="font-display text-3xl italic leading-[1.05] text-white md:text-5xl lg:text-[3.5rem]">
+          Meet the founders.
+        </h2>
+      </div>
 
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+      <PillRow />
+      <MobileStack />
 
-    let rafId = 0;
-    const update = () => {
-      rafId = 0;
-      const rect = section.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const total = Math.max(1, rect.height - vh);
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / total));
+      <div className="h-12 md:h-16 lg:h-20" />
+    </section>
+  );
+}
 
-      const n = TEAM.length;
-      const seg = 1 / n;
-      const half = seg / 2;
-      const tw = TRANSITION_WIDTH;
+function PillRow() {
+  const [hovered, setHovered] = useState<number | null>(null);
 
-      let topIdx = 0;
-      let topOp = -1;
-      const opacities: number[] = [];
-      const transitionTs: number[] = [];
-      const signedDs: number[] = [];
-
-      slideRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const center = (i + 0.5) * seg;
-        const distance = Math.abs(progress - center);
-        const signed = progress - center;
-
-        let opacity: number;
-        let transitionT: number;
-        if (distance < half - tw / 2) {
-          opacity = 1;
-          transitionT = 0;
-        } else if (distance < half + tw / 2) {
-          const raw = (distance - (half - tw / 2)) / tw;
-          opacity = 1 - Math.pow(raw, 2);
-          transitionT = Math.sin(raw * Math.PI);
-        } else {
-          opacity = 0;
-          transitionT = 0;
-        }
-        opacity = Math.max(0, Math.min(1, opacity));
-        opacities[i] = opacity;
-        transitionTs[i] = transitionT;
-        signedDs[i] = signed;
-
-        if (opacity > topOp) {
-          topOp = opacity;
-          topIdx = i;
-        }
-      });
-
-      slideRefs.current.forEach((el, i) => {
-        if (!el) return;
-        el.style.opacity = String(opacities[i]);
-        el.style.pointerEvents = i === topIdx ? "auto" : "none";
-
-        const isLast = i === TEAM.length - 1;
-        if (isLast) {
-          el.style.filter = "none";
-          el.style.transform = "none";
-        } else {
-          const transitionT = transitionTs[i];
-          const signed = signedDs[i];
-          const blur = transitionT * 5;
-          const contrast = 1 + transitionT * 0.25;
-          const scale = 1 - transitionT * 0.04;
-          const rotation = (signed < 0 ? 1 : -1) * transitionT * 3;
-          el.style.filter = `blur(${blur.toFixed(2)}px) contrast(${contrast.toFixed(3)})`;
-          el.style.transform = `scale(${scale.toFixed(4)}) rotate(${rotation.toFixed(3)}deg)`;
-        }
-      });
-
-      let noiseOpacity = 0;
-      for (let i = 1; i < n; i++) {
-        const boundary = i * seg;
-        const d = Math.abs(progress - boundary);
-        if (d < tw / 2) {
-          noiseOpacity = Math.max(noiseOpacity, 1 - d / (tw / 2));
-        }
-      }
-      if (noiseRef.current) {
-        noiseRef.current.style.opacity = String(noiseOpacity * 0.8);
-      }
-    };
-
-    const onScroll = () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, []);
+  const getFlex = (i: number) => {
+    if (hovered === null) return 1;
+    if (hovered === i) return 3.6;
+    return 0.7;
+  };
 
   return (
-    <>
-      <section className="relative flex flex-col items-center overflow-hidden bg-black px-6 pt-[5vh] pb-[7vh]">
-        <div className="text-center">
-          <div className="mb-[1.5vh] font-sans text-[11px] font-medium tracking-[0.4em] text-white/70 uppercase md:mb-[2vh] md:text-xs">
-            The Crew
-          </div>
-          <h2 className="font-display text-3xl italic leading-[1.05] text-white md:text-4xl lg:text-[2.5rem]">
-            Meet the team.
-          </h2>
-        </div>
-      </section>
-
-      <section
-      ref={sectionRef}
-      className="relative bg-black"
-      style={{ height: `${TEAM.length * 130}vh` }}
+    <div
+      onMouseLeave={() => setHovered(null)}
+      className="mx-auto hidden h-[420px] w-full max-w-7xl gap-3 px-6 md:flex md:h-[440px] md:px-10 lg:h-[500px] lg:gap-4 lg:px-16"
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        {TEAM.map((person, i) => (
-          <div
-            key={i}
-            ref={(el) => {
-              slideRefs.current[i] = el;
-            }}
-            className="absolute inset-0"
-            style={{
-              opacity: i === 0 ? 1 : 0,
-              pointerEvents: i === 0 ? "auto" : "none",
-              willChange: "opacity, transform, filter",
-            }}
-          >
-            <div className="pointer-events-none absolute inset-0 bg-neutral-900" />
-            <DistortionImage srcs={person.images} alt={person.name} />
-
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent" />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
-
-            <div className="pointer-events-none absolute left-8 top-8 font-sans text-[11px] font-medium tracking-[0.35em] text-white/90 uppercase md:left-14 md:top-10 md:text-xs">
-              {person.name}
-            </div>
-
-            <div className="pointer-events-none absolute right-8 top-8 font-sans text-[11px] font-medium tracking-[0.3em] text-white/70 uppercase md:right-14 md:top-10 md:text-xs">
-              {String(i + 1).padStart(2, "0")} /{" "}
-              {String(TEAM.length).padStart(2, "0")}
-            </div>
-
-            <div className="pointer-events-none absolute bottom-12 left-8 max-w-[640px] md:bottom-16 md:left-14 lg:bottom-20 lg:left-20">
-              <div className="mb-4 font-sans text-[11px] font-medium tracking-[0.35em] text-white/70 uppercase md:mb-5 md:text-xs">
-                {person.role}
-              </div>
-              <p className="font-display text-2xl leading-[1.12] text-white md:text-4xl lg:text-5xl lg:leading-[1.08]">
-                {person.bio}
-              </p>
-            </div>
-
-            <div className="absolute bottom-12 right-8 flex items-center gap-5 md:bottom-16 md:right-14 lg:bottom-20 lg:right-20">
-              <a
-                href={person.x}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${person.name} on X`}
-                className="text-white/65 transition-colors hover:text-white"
-              >
-                <XIcon className="h-[18px] w-[18px]" />
-              </a>
-              <a
-                href={person.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${person.name} on LinkedIn`}
-                className="text-white/65 transition-colors hover:text-white"
-              >
-                <LinkedInIcon className="h-[18px] w-[18px]" />
-              </a>
-              <a
-                href={person.email}
-                aria-label={`Email ${person.name}`}
-                className="text-white/65 transition-colors hover:text-white"
-              >
-                <MailIcon className="h-5 w-5" />
-              </a>
-            </div>
-          </div>
-        ))}
-
-        <div
-          ref={noiseRef}
-          aria-hidden
-          className="pointer-events-none absolute inset-0 mix-blend-screen"
-          style={{
-            opacity: 0,
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.35' numOctaves='2' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.85 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-            backgroundSize: "240px 240px",
-            backgroundRepeat: "repeat",
-            animation: "noise-shift 0.18s steps(6) infinite",
-          }}
+      {TEAM.map((person, i) => (
+        <Pill
+          key={person.name}
+          person={person}
+          index={i}
+          isActive={hovered === i}
+          someoneActive={hovered !== null}
+          flex={getFlex(i)}
+          onMouseEnter={() => setHovered(i)}
         />
+      ))}
+    </div>
+  );
+}
+
+function Pill({
+  person,
+  index,
+  isActive,
+  someoneActive,
+  flex,
+  onMouseEnter,
+}: {
+  person: Person;
+  index: number;
+  isActive: boolean;
+  someoneActive: boolean;
+  flex: number;
+  onMouseEnter: () => void;
+}) {
+  const idle = !someoneActive;
+
+  return (
+    <div
+      onMouseEnter={onMouseEnter}
+      className="relative h-full cursor-pointer overflow-hidden rounded-[2rem]"
+      style={{
+        flexGrow: flex,
+        flexBasis: 0,
+        transition: `flex-grow 600ms ${EASE}`,
+        willChange: "flex-grow",
+      }}
+    >
+      <Image
+        src={person.image}
+        alt={person.name}
+        fill
+        sizes="(max-width: 767px) 0px, (max-width: 1280px) 70vw, 900px"
+        className="object-cover"
+        style={{
+          transform: isActive ? "scale(1.02)" : "scale(1.08)",
+          transition: `transform 800ms ${EASE}, filter 600ms ${EASE}`,
+          filter: isActive ? "brightness(1)" : "brightness(0.78)",
+        }}
+      />
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: isActive
+            ? "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 38%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0.35) 100%)"
+            : "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.55) 100%)",
+          transition: `background 600ms ${EASE}`,
+        }}
+      />
+
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-6 lg:p-8"
+        style={{
+          opacity: idle ? 1 : isActive ? 0 : 0.4,
+          transition: `opacity 400ms ${EASE}`,
+        }}
+      >
+        <span className="font-sans text-[10px] font-medium tracking-[0.32em] text-white/85 uppercase lg:text-[11px]">
+          {person.name.split(" ")[0]}
+        </span>
+        <span className="font-sans text-[10px] font-medium tracking-[0.32em] text-white/55 uppercase lg:text-[11px]">
+          {String(index + 1).padStart(2, "0")}
+        </span>
       </div>
-    </section>
-    </>
+
+      <div
+        className="absolute inset-x-0 bottom-0 flex items-end justify-center pb-10 lg:pb-12"
+        style={{
+          opacity: isActive ? 0 : 1,
+          transform: isActive ? "translateY(8px)" : "translateY(0)",
+          transition: `opacity 350ms ${EASE}, transform 500ms ${EASE}`,
+        }}
+      >
+        <div className="font-sans text-[10px] font-semibold tracking-[0.5em] text-white uppercase whitespace-nowrap [writing-mode:vertical-rl] rotate-180 lg:text-[11px]">
+          {person.role}
+        </div>
+      </div>
+
+      <div
+        className="absolute inset-x-0 bottom-0 flex flex-col justify-end p-8 lg:p-10"
+        style={{
+          opacity: isActive ? 1 : 0,
+          transform: isActive ? "translateY(0)" : "translateY(24px)",
+          transitionProperty: "opacity, transform",
+          transitionDuration: isActive ? "650ms, 750ms" : "250ms, 400ms",
+          transitionTimingFunction: EASE,
+          transitionDelay: isActive ? "180ms" : "0ms",
+          pointerEvents: isActive ? "auto" : "none",
+        }}
+      >
+        <div className="mb-3 font-sans text-[10px] font-medium tracking-[0.32em] text-white/70 uppercase lg:text-[11px]">
+          {person.role}
+        </div>
+        <h3 className="mb-4 font-display text-3xl leading-[1.05] text-white lg:text-[2.5rem]">
+          {person.name}
+        </h3>
+        <p className="mb-6 max-w-md font-display text-[15px] leading-[1.4] text-white/85 lg:text-base lg:leading-[1.45]">
+          {person.bio}
+        </p>
+        <Socials socials={person.socials} name={person.name} />
+      </div>
+    </div>
+  );
+}
+
+function MobileStack() {
+  return (
+    <div className="flex flex-col gap-4 px-4 md:hidden">
+      {TEAM.map((person, i) => (
+        <div
+          key={person.name}
+          className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem]"
+        >
+          <Image
+            src={person.image}
+            alt={person.name}
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.3) 100%)",
+            }}
+          />
+          <div className="absolute inset-x-0 top-0 flex items-start justify-between p-5">
+            <span className="font-sans text-[10px] font-medium tracking-[0.3em] text-white/85 uppercase">
+              {person.name.split(" ")[0]}
+            </span>
+            <span className="font-sans text-[10px] font-medium tracking-[0.3em] text-white/55 uppercase">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 flex flex-col p-6">
+            <div className="mb-2 font-sans text-[10px] font-medium tracking-[0.32em] text-white/70 uppercase">
+              {person.role}
+            </div>
+            <h3 className="mb-3 font-display text-2xl leading-[1.1] text-white">
+              {person.name}
+            </h3>
+            <p className="mb-5 font-display text-[15px] leading-[1.4] text-white/85">
+              {person.bio}
+            </p>
+            <Socials socials={person.socials} name={person.name} />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

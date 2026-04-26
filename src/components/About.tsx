@@ -22,9 +22,11 @@ export default function About() {
 
     gsap.registerPlugin(ScrollTrigger, SplitText);
 
+    let cancelled = false;
     let ctx: gsap.Context | undefined;
 
     const init = () => {
+      if (cancelled) return;
       ctx = gsap.context(() => {
         const paragraphs =
           container.querySelectorAll<HTMLElement>(".about-text");
@@ -63,11 +65,15 @@ export default function About() {
       init();
     }
 
-    return () => ctx?.revert();
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
   }, []);
 
   return (
     <section
+      id="about"
       ref={containerRef}
       className="relative overflow-hidden bg-black"
     >
@@ -103,11 +109,11 @@ export default function About() {
               {KICKER}
             </div>
 
-            <div className="space-y-12 md:space-y-16 lg:space-y-20">
+            <div className="space-y-9 md:space-y-16 lg:space-y-20">
               {PARAGRAPHS.map((paragraph, i) => (
                 <p
                   key={i}
-                  className="about-text font-display font-normal tracking-[-0.012em] text-[#EDEDED] text-[1.75rem] leading-[1.25] md:text-[2.5rem] md:leading-[1.18] lg:text-[3.25rem] lg:leading-[1.12]"
+                  className="about-text font-display font-normal tracking-[-0.012em] text-[#EDEDED] text-[1.5rem] leading-[1.28] md:text-[2.5rem] md:leading-[1.18] lg:text-[3.25rem] lg:leading-[1.12]"
                 >
                   {paragraph}
                 </p>
