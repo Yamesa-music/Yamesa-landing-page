@@ -15,7 +15,7 @@ const TEAM: Person[] = [
   {
     name: "Yash Agrawal",
     role: "Founder & CEO",
-    bio: "I'm driving Yamesa's overall direction across product and technology.",
+    bio: "I bring vision and I drive Yamesa's overall direction across product and technology.",
     image: "/yash-img.jpeg",
     socials: {
       x: "#",
@@ -26,8 +26,8 @@ const TEAM: Person[] = [
   {
     name: "Mehar Parnami",
     role: "Co-founder & CMO",
-    bio: "I shape vision into scalable growth by aligning product, brand, and storytelling. Through insight-led marketing, I build systems that drive acquisition, retention, and lasting value.",
-    image: "/mehar-img.jpeg",
+    bio: "I don't market brands I make them impossible to ignore. At Yamesa, I turn vision into culture and attention into obsession",
+    image: "/mehar2-img.jpeg",
     socials: {
       x: "#",
       linkedin: "#",
@@ -37,7 +37,7 @@ const TEAM: Person[] = [
   {
     name: "Sagar Gupta",
     role: "Co-founder & CFO",
-    bio: "I'm not just building this product — I'm running the business side of it too.",
+    bio: "I'm not just building this product, I'm building ecosystem",
     image: "/sagar-img.jpeg",
     socials: {
       x: "#",
