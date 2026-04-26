@@ -15,7 +15,7 @@ const TEAM: Person[] = [
   {
     name: "Yash Agrawal",
     role: "Founder & CEO",
-    bio: "An indie music obsessive building Yamesa for the artists the algorithm forgets. Raised on mixtapes and small-venue shows, building the platform that was always needed.",
+    bio: "I'm driving Yamesa's overall direction across product and technology.",
     image: "/yash-img.jpeg",
     socials: {
       x: "#",
@@ -25,8 +25,8 @@ const TEAM: Person[] = [
   },
   {
     name: "Mehar Parnami",
-    role: "Design & Brand",
-    bio: "Shaping the visual voice of Yamesa. Believes the best discoveries happen at the intersection of taste and trust, and that every artist deserves a story told well.",
+    role: "Co-founder & CMO",
+    bio: "I shape vision into scalable growth by aligning product, brand, and storytelling. Through insight-led marketing, I build systems that drive acquisition, retention, and lasting value.",
     image: "/mehar-img.jpeg",
     socials: {
       x: "#",
@@ -36,8 +36,8 @@ const TEAM: Person[] = [
   },
   {
     name: "Sagar Gupta",
-    role: "Engineering",
-    bio: "Building the infrastructure behind Yamesa's curated feed. Obsessed with making technology serve artists, not the other way around.",
+    role: "Co-founder & CFO",
+    bio: "I'm not just building this product — I'm running the business side of it too.",
     image: "/sagar-img.jpeg",
     socials: {
       x: "#",
