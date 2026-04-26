@@ -34,7 +34,7 @@ export default function Waitlist() {
           Join the Waitlist
         </div>
 
-        <p className="mt-5 font-display text-[1.875rem] leading-[1.15] text-white md:mt-5 md:text-5xl lg:text-[3.5rem]">
+        <p className="mt-5 font-display text-[1.875rem] leading-[1.15] text-white md:text-5xl lg:text-[3.5rem]">
           Be first to hear what you&apos;ve been missing.
         </p>
 
@@ -67,6 +67,7 @@ export default function Waitlist() {
                 role="radio"
                 aria-checked={role === "listener"}
                 onClick={() => setRole("listener")}
+                suppressHydrationWarning
                 className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 font-sans text-[10px] font-medium tracking-[0.16em] uppercase transition-colors duration-300 md:py-2 md:text-xs md:tracking-[0.18em] ${
                   role === "listener" ? "text-black" : "text-white/75"
                 }`}
@@ -78,6 +79,7 @@ export default function Waitlist() {
                 role="radio"
                 aria-checked={role === "creator"}
                 onClick={() => setRole("creator")}
+                suppressHydrationWarning
                 className={`relative z-10 flex-1 whitespace-nowrap rounded-full px-5 py-2.5 font-sans text-[10px] font-medium tracking-[0.16em] uppercase transition-colors duration-300 md:py-2 md:text-xs md:tracking-[0.18em] ${
                   role === "creator" ? "text-black" : "text-white/75"
                 }`}

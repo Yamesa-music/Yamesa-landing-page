@@ -61,7 +61,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="hidden grid-cols-2 gap-6 px-8 pt-12 text-sm md:grid md:grid-cols-5 md:px-14 md:pt-16 lg:px-20">
+      <div className="hidden gap-6 px-8 pt-12 text-sm md:grid md:grid-cols-5 md:px-14 md:pt-16 lg:px-20">
         <div className="font-sans">Yamesa&reg;</div>
         <div className="font-sans text-white/60">Curated Music Discovery</div>
         <div
@@ -123,7 +123,7 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Address mail"
                 suppressHydrationWarning
-                className="flex-1 bg-transparent py-2 text-sm text-white outline-none placeholder:text-white/40"
+                className="flex-1 bg-transparent py-2 text-base text-white outline-none placeholder:text-white/40 md:text-sm"
               />
               <button
                 type="submit"
@@ -214,7 +214,7 @@ export default function Footer() {
             className="h-auto w-full object-contain"
           />
         </div>
-        <h2 className="relative z-10 select-none font-display text-[min(20vw,42vh,20rem)] font-bold leading-[0.82] tracking-[-0.03em] text-white">
+        <h2 className="relative z-10 select-none font-display text-[24vw] font-bold leading-[0.82] tracking-[-0.03em] text-white md:text-[min(20vw,42vh,20rem)]">
           Yamesa
         </h2>
       </div>
