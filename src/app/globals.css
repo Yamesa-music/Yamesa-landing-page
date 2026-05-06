@@ -4,8 +4,8 @@
   --color-background: #0B0A0B;
   --color-foreground: #F5F1E8;
   --color-accent: #C9A36A;
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-playfair);
+  --font-sans: var(--font-bricolage);
+  --font-display: var(--font-bricolage);
   --font-heading: var(--font-bricolage);
 }
 
