@@ -1,125 +1,168 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
-
-const KICKER = "Not Every Artist Gets Heard.";
-
-const PARAGRAPHS = [
-  "Yamesa is a curated platform for the music the algorithm keeps quiet. Real ears, real taste, real artists. No payola, no autoplay.",
-  "Scroll through short reels of music you've never heard. Every artist is handpicked, every track chosen by real listeners. Discovery that actually discovers, one reel at a time.",
-  "Press play and keep going. Yamesa runs in the background of your phone, your day, your commute. Discover, save, and stream while your phone does everything else.",
-];
+import Image from "next/image";
 
 export default function About() {
-  const containerRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    gsap.registerPlugin(ScrollTrigger, SplitText);
-
-    let cancelled = false;
-    let ctx: gsap.Context | undefined;
-
-    const init = () => {
-      if (cancelled) return;
-      ctx = gsap.context(() => {
-        const paragraphs =
-          container.querySelectorAll<HTMLElement>(".about-text");
-        const splits: SplitText[] = [];
-
-        paragraphs.forEach((p) => {
-          const split = SplitText.create(p, {
-            type: "lines",
-            linesClass: "about-line",
-          });
-          splits.push(split);
-
-          split.lines.forEach((line) => {
-            gsap.to(line, {
-              backgroundPositionX: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: line as HTMLElement,
-                scrub: true,
-                start: "top 70%",
-                end: "top 45%",
-              },
-            });
-          });
-        });
-
-        return () => {
-          splits.forEach((s) => s.revert());
-        };
-      }, container);
-    };
-
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(init);
-    } else {
-      init();
-    }
-
-    return () => {
-      cancelled = true;
-      ctx?.revert();
-    };
-  }, []);
-
   return (
     <section
       id="about"
-      ref={containerRef}
-      className="relative overflow-hidden bg-black"
+      className="relative overflow-hidden bg-[#0B0A0B]"
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        style={{ transform: "translateZ(0)" }}
-      >
-        <div
-          className="absolute -left-[10%] top-[20%] h-[560px] w-[560px] rounded-full opacity-40"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(201,163,106,0.22) 0%, transparent 62%)",
-            filter: "blur(90px)",
-            transform: "translateZ(0)",
-          }}
-        />
-        <div
-          className="absolute -right-[12%] top-[62%] h-[640px] w-[640px] rounded-full opacity-40"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(176,36,36,0.22) 0%, transparent 62%)",
-            filter: "blur(95px)",
-            transform: "translateZ(0)",
-          }}
-        />
+      {/* Desktop layout */}
+      <div className="relative hidden md:flex w-full h-dvh mx-auto items-center justify-center">
+        <div className="relative w-full" style={{ height: "80%" }}>
+          {/* Center heading */}
+          <h2
+            className="absolute font-heading font-semibold text-center leading-[1.2] flex items-center justify-center"
+            style={{
+              width: "32%",
+              left: "34%",
+              top: "30%",
+              fontSize: "3.8vw",
+            }}
+          >
+            <span className="bg-gradient-to-r from-[#FF69B4] via-[#FFB347] to-[#FF69B4] bg-clip-text text-transparent bg-[length:200%_100%]">
+              No algorithm
+              <br />
+              No agenda
+              <br />
+              Just discovery
+            </span>
+          </h2>
+
+          {/* Oval around "discovery" — Vector 1 */}
+          <Image
+            src="/vectors/Vector 1.png"
+            alt=""
+            width={383}
+            height={100}
+            className="absolute pointer-events-none"
+            style={{
+              width: "21%",
+              height: "auto",
+              left: "44%",
+              top: "52%",
+              transform: "rotate(-2.06deg)",
+            }}
+          />
+
+          {/* Top center text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "20%", left: "40%", top: "2%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white text-center w-full">
+              Most platforms push what already performs, leaving much music unheard.{" "}
+              <span className="font-bold">YAMESA</span> curates music algorithms don&apos;t surface.
+            </p>
+          </div>
+
+          {/* Left-top text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "21.3%", left: "4.83%", top: "15%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white">
+              Users progress based on engagement, unlocking deeper participation and added recognition within the platform.
+            </p>
+          </div>
+
+          {/* Right-top text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "21.36%", left: "73.81%", top: "15%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white">
+              Discover new music through short, scrollable reels designed for quick and effortless exploration.
+            </p>
+          </div>
+
+          {/* Left-bottom text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "21.3%", left: "4.83%", top: "63%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white">
+              Enable artists and listeners to connect and form real-world or digital gigs directly through the platform.
+            </p>
+          </div>
+
+          {/* Right-bottom text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "21.36%", left: "73.81%", top: "63%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white">
+              Users can earn badges tied to artists, creating a sense of early support and a visible stake in their journey.
+            </p>
+          </div>
+
+          {/* Bottom center text */}
+          <div
+            className="absolute flex items-center"
+            style={{ width: "20%", left: "40%", top: "82%" }}
+          >
+            <p className="font-heading font-medium text-[1.08vw] leading-[1.2] text-white text-center w-full">
+              Every artist is handpicked and every track chosen by real listeners, ensuring discovery is intentional and not driven by automated systems.
+            </p>
+          </div>
+
+          {/* === ARROWS === */}
+          {/* All arrow PNGs are exported from Figma with rotation baked in. No CSS transforms needed. */}
+
+          {/* Top arrow (points UP from heading to top text) */}
+          <Image src="/vectors/Vector 4.png" alt="" width={4} height={96} className="absolute pointer-events-none" style={{ height: "8%", width: "auto", left: "49.5%", top: "19%" }} />
+          <Image src="/vectors/Vector 14.png" alt="" width={22} height={12} className="absolute pointer-events-none" style={{ width: "1.2%", height: "auto", left: "49%", top: "18.5%" }} />
+
+          {/* Top-left arrow — mirrored top-right */}
+          <Image src="/vectors/arrow-top-left.svg" alt="" width={100} height={100} className="absolute pointer-events-none" style={{ width: "6%", height: "auto", left: "30%", top: "24%" }} />
+
+          {/* Top-right arrow */}
+          <Image src="/vectors/arrow-top-right.svg" alt="" width={100} height={100} className="absolute pointer-events-none" style={{ width: "6%", height: "auto", left: "64%", top: "24%" }} />
+
+          {/* Bottom-left arrow — bottom-right flipped horizontally */}
+          <Image src="/vectors/arrow-bottom-right.svg" alt="" width={100} height={100} className="absolute pointer-events-none" style={{ width: "6%", height: "auto", left: "30%", top: "56%", transform: "scaleX(-1)" }} />
+
+          {/* Bottom-right arrow */}
+          <Image src="/vectors/arrow-bottom-right.svg" alt="" width={100} height={100} className="absolute pointer-events-none" style={{ width: "6%", height: "auto", left: "64%", top: "56%" }} />
+
+          {/* Bottom arrow — top arrow (Vector 4+14) rotated 180deg */}
+          <Image src="/vectors/Vector 4.png" alt="" width={4} height={96} className="absolute pointer-events-none" style={{ height: "8%", width: "auto", left: "49.5%", top: "68%", transform: "rotate(180deg)" }} />
+          <Image src="/vectors/Vector 14.png" alt="" width={22} height={12} className="absolute pointer-events-none" style={{ width: "1.2%", height: "auto", left: "49%", top: "75.5%", transform: "rotate(180deg)" }} />
+        </div>
       </div>
 
-      <div className="relative mx-auto w-full max-w-7xl px-6 pt-[10vh] pb-[18vh] md:px-12 md:pt-[12vh] md:pb-[22vh] lg:px-20 lg:pt-[14vh] lg:pb-[26vh]">
-        <div className="md:ml-[14%] lg:ml-[22%]">
-          <div className="max-w-[640px]">
-            <div className="mb-14 font-sans text-[10px] font-semibold tracking-[0.32em] text-[#EDEDED] uppercase md:mb-20 md:text-[11px]">
-              {KICKER}
-            </div>
-
-            <div className="space-y-9 md:space-y-16 lg:space-y-20">
-              {PARAGRAPHS.map((paragraph, i) => (
-                <p
-                  key={i}
-                  className="about-text font-display font-normal tracking-[-0.012em] text-[#EDEDED] text-[1.5rem] leading-[1.28] md:text-[2.5rem] md:leading-[1.18] lg:text-[3.25rem] lg:leading-[1.12]"
-                >
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </div>
+      {/* Mobile layout */}
+      <div className="flex flex-col items-center px-6 py-16 md:hidden">
+        <h2 className="font-heading font-semibold text-[10vw] leading-[1.2] text-center mb-12">
+          <span className="bg-gradient-to-r from-[#FF69B4] via-[#FFB347] to-[#FF69B4] bg-clip-text text-transparent bg-[length:200%_100%]">
+            No algorithm
+            <br />
+            No agenda
+            <br />
+            Just discovery
+          </span>
+        </h2>
+        <div className="flex flex-col gap-8 max-w-sm">
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Most platforms push what already performs, leaving much music unheard.{" "}
+            <span className="font-bold">YAMESA</span> curates music algorithms don&apos;t surface.
+          </p>
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Discover new music through short, scrollable reels designed for quick and effortless exploration.
+          </p>
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Users progress based on engagement, unlocking deeper participation and added recognition within the platform.
+          </p>
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Enable artists and listeners to connect and form real-world or digital gigs directly through the platform.
+          </p>
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Users can earn badges tied to artists, creating a sense of early support and a visible stake in their journey.
+          </p>
+          <p className="font-heading font-medium text-[4vw] leading-[1.3] text-white text-center">
+            Every artist is handpicked and every track chosen by real listeners, ensuring discovery is intentional and not driven by automated systems.
+          </p>
         </div>
       </div>
     </section>

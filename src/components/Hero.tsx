@@ -89,49 +89,9 @@ export default function Hero() {
           style={{ transform: "translateZ(0)" }}
         >
           <div
-            className="absolute left-1/2 top-[58%] h-[115vh] w-[85vw] max-w-[1200px] -translate-x-1/2 -translate-y-1/2"
+            className="absolute inset-0"
             style={{
-              background:
-                "radial-gradient(ellipse 48% 52% at 50% 50%, rgba(255,108,40,0.48) 0%, rgba(210,60,22,0.4) 22%, rgba(130,30,14,0.26) 44%, rgba(60,14,8,0.13) 65%, transparent 82%)",
-              filter: "blur(55px)",
-              transform: "translate3d(-50%, -50%, 0)",
-              willChange: "transform",
-            }}
-          />
-          <div
-            className="absolute -left-[10%] -top-[12%] h-[70vh] w-[58vw]"
-            style={{
-              background:
-                "radial-gradient(ellipse 70% 62% at 55% 55%, rgba(225,78,30,0.45) 0%, rgba(170,46,20,0.32) 28%, rgba(110,26,12,0.2) 52%, transparent 80%)",
-              filter: "blur(80px)",
-              transform: "translateZ(0)",
-            }}
-          />
-          <div
-            className="absolute right-[-4%] top-[52%] h-[58vh] w-[46vw]"
-            style={{
-              background:
-                "radial-gradient(ellipse 72% 60% at 48% 52%, rgba(198,58,20,0.38) 0%, rgba(92,22,12,0.2) 52%, transparent 80%)",
-              filter: "blur(88px)",
-              transform: "translateZ(0)",
-            }}
-          />
-          <div
-            className="absolute left-[18%] bottom-[6%] hidden h-[32vh] w-[30vw] md:block"
-            style={{
-              background:
-                "radial-gradient(ellipse 65% 60% at 55% 45%, rgba(178,44,18,0.3) 0%, rgba(70,16,10,0.13) 55%, transparent 80%)",
-              filter: "blur(72px)",
-              transform: "translateZ(0)",
-            }}
-          />
-          <div
-            className="absolute right-[22%] top-[8%] hidden h-[24vh] w-[22vw] md:block"
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 55% at 50% 50%, rgba(160,40,18,0.26) 0%, transparent 72%)",
-              filter: "blur(68px)",
-              transform: "translateZ(0)",
+              background: "linear-gradient(179.75deg, rgba(0,0,0,0.15) 0.22%, rgba(0,0,0,0) 52.11%), linear-gradient(75.21deg, rgba(255,250,254,0) 63.57%, rgba(224,109,201,0.126) 100.24%), linear-gradient(39.86deg, rgba(0,0,0,0.2) 39.65%, rgba(102,102,102,0.2) 93.23%)",
             }}
           />
         </div>
@@ -150,25 +110,11 @@ export default function Hero() {
       <div className="relative grid grid-cols-1 overflow-hidden md:min-h-screen md:grid-cols-2">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div
-            className="absolute -left-[14%] top-[40%] h-[640px] w-[640px] rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(170,46,20,0.22) 0%, transparent 65%)",
-              filter: "blur(110px)",
-            }}
-          />
-          <div
-            className="absolute right-[-12%] bottom-[10%] h-[560px] w-[560px] rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle, rgba(201,163,106,0.18) 0%, transparent 65%)",
-              filter: "blur(120px)",
-            }}
-          />
-        </div>
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "linear-gradient(179.75deg, rgba(0,0,0,0.15) 0.22%, rgba(0,0,0,0) 52.11%), linear-gradient(75.21deg, rgba(255,250,254,0) 63.57%, rgba(224,109,201,0.126) 100.24%), linear-gradient(39.86deg, rgba(0,0,0,0.2) 39.65%, rgba(102,102,102,0.2) 93.23%)",
+          }}
+        />
 
         <div className="relative flex items-center justify-center px-6 pt-10 pb-4 md:px-8 md:py-20">
           <div

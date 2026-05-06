@@ -1,44 +1,20 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0A0A0A;
+  --color-background: #0B0A0B;
   --color-foreground: #F5F1E8;
   --color-accent: #C9A36A;
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-playfair);
+  --font-sans: var(--font-bricolage);
+  --font-display: var(--font-bricolage);
+  --font-heading: var(--font-bricolage);
 }
 
 body {
-  background: var(--color-background);
+  background: #0B0A0B;
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
 }
 
-.about-line {
-  background-image: linear-gradient(
-    to right,
-    rgb(237 237 237) 50%,
-    rgb(237 237 237 / 0.28) 50%
-  );
-  background-size: 200% 100%;
-  background-position-x: 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  will-change: background-position;
-}
-
-@media (max-width: 767px) {
-  /* Reduce GPU pressure on phones — large blurred surfaces are the
-     biggest cause of scroll jank on low-end mobile devices. */
-  .about-line {
-    will-change: auto;
-  }
-}
 
