@@ -1,15 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0A0A0A;
+  --color-background: #0B0A0B;
   --color-foreground: #F5F1E8;
   --color-accent: #C9A36A;
   --font-sans: var(--font-inter);
   --font-display: var(--font-playfair);
+  --font-heading: var(--font-bricolage);
 }
 
 body {
-  background: var(--color-background);
+  background: #0B0A0B;
   color: var(--color-foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: clip;
