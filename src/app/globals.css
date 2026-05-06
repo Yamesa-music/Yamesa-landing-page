@@ -17,29 +17,4 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-.about-line {
-  background-image: linear-gradient(
-    to right,
-    rgb(237 237 237) 50%,
-    rgb(237 237 237 / 0.28) 50%
-  );
-  background-size: 200% 100%;
-  background-position-x: 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  will-change: background-position;
-}
-
-@media (max-width: 767px) {
-  /* Reduce GPU pressure on phones — large blurred surfaces are the
-     biggest cause of scroll jank on low-end mobile devices. */
-  .about-line {
-    will-change: auto;
-  }
-}
 
