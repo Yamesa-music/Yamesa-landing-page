@@ -21,13 +21,14 @@ export default function Waitlist() {
 
     const { error: insertError } = await supabase
       .from("waitlist")
-      .insert({ email });
+      .insert([{ email }]);
 
     if (insertError) {
       setLoading(false);
       if (insertError.code === "23505") {
         setError("You're already on the list!");
       } else {
+        console.error("Waitlist insert error:", insertError);
         setError("Something went wrong. Try again.");
       }
       return;
@@ -36,10 +37,10 @@ export default function Waitlist() {
     supabase.functions.invoke("send-email", {
       body: {
         to: email,
-        subject: "You're on the Yamesa waitlist! 🎶",
+        subject: "You're on the Yamesa waitlist!",
         html: buildWaitlistEmail(),
       },
-    });
+    }).catch(() => {});
 
     setLoading(false);
     setSubmitted(true);
