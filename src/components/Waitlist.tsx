@@ -17,9 +17,7 @@ export default function Waitlist() {
     setLoading(true);
     setError("");
 
-    const supabase = getSupabase();
-
-    const { error: insertError } = await supabase
+    const { error: insertError } = await getSupabase()
       .from("waitlist")
       .insert([{ email }]);
 
@@ -28,47 +26,21 @@ export default function Waitlist() {
       if (insertError.code === "23505") {
         setError("You're already on the list!");
       } else {
-        console.error("Waitlist insert error:", insertError);
         setError("Something went wrong. Try again.");
       }
       return;
     }
 
-    supabase.functions.invoke("send-email", {
-      body: {
-        to: email,
-        subject: "You're on the Yamesa waitlist!",
-        html: buildWaitlistEmail(),
-      },
-    }).catch(() => {});
+    const emailjs = await import("@emailjs/browser");
+    emailjs.send(
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+      { to_email: email },
+      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+    ).catch(() => {});
 
     setLoading(false);
     setSubmitted(true);
-  }
-
-  function buildWaitlistEmail() {
-    return `
-      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 24px; background: #0B0A0B; color: #ffffff;">
-        <div style="margin-bottom: 32px;">
-          <strong style="font-size: 18px; letter-spacing: 0.05em;">YAMESA</strong>
-        </div>
-        <h1 style="font-size: 28px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">
-          You're in.
-        </h1>
-        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 24px;">
-          Thanks for joining the Yamesa waitlist. You'll be among the first to experience music discovery beyond the algorithm.
-        </p>
-        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 24px;">
-          We're building something different. A platform where every artist is handpicked and every track is chosen by real listeners. No algorithms. No agenda. Just discovery.
-        </p>
-        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 32px;">
-          We'll be in touch soon with early access details.
-        </p>
-        <div style="border-top: 1px solid #222; padding-top: 24px; font-size: 13px; color: #666;">
-          Yamesa | Discovery beyond the algorithm
-        </div>
-      </div>
-    `;
   }
 
   return (
@@ -92,7 +64,7 @@ export default function Waitlist() {
           </p>
         </div>
 
-        {/* Right side — Ticket card */}
+        {/* Right side - Ticket card */}
         <div className="md:w-[60%] lg:w-[58%]">
           <div
             className="relative rounded-2xl overflow-hidden"
