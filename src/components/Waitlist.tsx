@@ -58,13 +58,13 @@ export default function Waitlist() {
           Thanks for joining the Yamesa waitlist. You'll be among the first to experience music discovery beyond the algorithm.
         </p>
         <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 24px;">
-          We're building something different — a platform where every artist is handpicked and every track is chosen by real listeners. No algorithms. No agenda. Just discovery.
+          We're building something different. A platform where every artist is handpicked and every track is chosen by real listeners. No algorithms. No agenda. Just discovery.
         </p>
         <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 32px;">
           We'll be in touch soon with early access details.
         </p>
         <div style="border-top: 1px solid #222; padding-top: 24px; font-size: 13px; color: #666;">
-          Yamesa — Discovery beyond the algorithm
+          Yamesa | Discovery beyond the algorithm
         </div>
       </div>
     `;

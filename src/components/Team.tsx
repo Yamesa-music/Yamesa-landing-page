@@ -18,9 +18,9 @@ const TEAM: Person[] = [
     bio: "I bring vision and I drive Yamesa's overall direction across product and technology.",
     image: "/yash-img.jpeg",
     socials: {
-      x: "#",
-      linkedin: "#",
-      email: "mailto:yash@yamesa.com",
+      x: "https://x.com/Yash__Sensei",
+      linkedin: "https://www.linkedin.com/in/yash-agrawal-208841307/",
+      email: "mailto:yashagrawalrkt123@gmail.com",
     },
   },
   {
@@ -29,9 +29,9 @@ const TEAM: Person[] = [
     bio: "I don't market brands, I make them impossible to ignore. At Yamesa, I design what people reach for next.",
     image: "/mehar3-img.jpeg",
     socials: {
-      x: "#",
-      linkedin: "#",
-      email: "mailto:mehar@yamesa.com",
+      x: "https://x.com/meharparnami14",
+      linkedin: "https://www.linkedin.com/in/mehar-parnami-152594273/",
+      email: "mailto:meharparnami14@gmail.com",
     },
   },
   {
@@ -40,9 +40,9 @@ const TEAM: Person[] = [
     bio: "I'm not just building this product, I'm building ecosystem",
     image: "/sagar-img.jpeg",
     socials: {
-      x: "#",
-      linkedin: "#",
-      email: "mailto:sagar@yamesa.com",
+      x: "",
+      linkedin: "https://www.linkedin.com/in/sagarguptaa08/",
+      email: "mailto:sagargupta08072003@gmail.com",
     },
   },
 ];

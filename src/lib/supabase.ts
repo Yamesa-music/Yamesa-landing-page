@@ -6,8 +6,8 @@ export function getSupabase(): SupabaseClient {
   if (_supabase) return _supabase;
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "";
+  const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "";
 
-  _supabase = createClient(url, key);
+  _supabase = createClient(url, publishableKey);
   return _supabase;
 }
