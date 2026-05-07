@@ -1,12 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
   const [time, setTime] = useState("");
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     const update = () => {
@@ -21,12 +19,6 @@ export default function Footer() {
     return () => clearInterval(id);
   }, []);
 
-  function onSubscribe(e: FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-  }
-
   return (
     <footer className="relative overflow-hidden bg-black text-white">
       <div className="px-6 pt-10 text-sm md:hidden">
@@ -36,7 +28,7 @@ export default function Footer() {
             className="font-sans tabular-nums text-[11px] text-white/55"
             suppressHydrationWarning
           >
-            {time ? `${time} Mumbai` : " "}
+            {time ? `${time} Bangalore` : " "}
           </div>
         </div>
         <div className="mt-1.5 font-sans text-white/60">
@@ -68,7 +60,7 @@ export default function Footer() {
           className="font-sans tabular-nums text-white/60"
           suppressHydrationWarning
         >
-          {time ? `${time} Mumbai` : " "}
+          {time ? `${time} Bangalore` : " "}
         </div>
         <div className="space-y-1 font-sans leading-snug text-white/60">
           <a
@@ -102,62 +94,22 @@ export default function Footer() {
 
       <div className="grid grid-cols-1 items-start gap-12 px-6 pb-6 pt-14 md:grid-cols-3 md:gap-6 md:px-14 md:pb-8 md:pt-20 lg:px-20 lg:pb-10 lg:pt-24">
         <div>
-          <p className="mb-6 font-display text-[1.625rem] italic leading-tight md:mb-8 md:text-[1.75rem] lg:text-3xl">
-            Subscribe to our
+          <p className="font-heading text-[1.5rem] font-semibold leading-tight text-white/90 md:text-[1.75rem] lg:text-[1.875rem]">
+            Music deserves to be
             <br />
-            newsletter
+            discovered, not decided.
           </p>
-          {subscribed ? (
-            <div className="font-sans text-sm tracking-wide text-white/80">
-              You&apos;re subscribed.
-            </div>
-          ) : (
-            <form
-              onSubmit={onSubscribe}
-              className="flex items-center border-b border-white/30 pb-1 transition-colors focus-within:border-white/70"
-            >
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Address mail"
-                suppressHydrationWarning
-                className="flex-1 bg-transparent py-2 text-base text-white outline-none placeholder:text-white/40 md:text-sm"
-              />
-              <button
-                type="submit"
-                aria-label="Subscribe"
-                suppressHydrationWarning
-                className="ml-3 text-white/60 transition-colors hover:text-white"
-              >
-                <svg
-                  viewBox="0 0 14 14"
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 11 L11 3 M5 3 L11 3 L11 9" />
-                </svg>
-              </button>
-            </form>
-          )}
+          <p className="mt-4 font-heading text-[13px] text-white/40">
+            The Yamesa Philosophy
+          </p>
         </div>
 
         <div className="space-y-6 text-sm">
           <div>
-            <a
-              href="mailto:contact@yamesa.com"
-              className="transition-colors hover:text-white/70"
-            >
-              contact@yamesa.com
-            </a>
+
           </div>
           <div className="leading-relaxed text-white/70">
-            Mumbai
+            Bangalore
             <br />
             India
           </div>
