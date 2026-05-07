@@ -2,15 +2,72 @@
 
 import Image from "next/image";
 import { useState, type FormEvent } from "react";
+import { getSupabase } from "@/lib/supabase";
 
 export default function Waitlist() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!email) return;
+
+    setLoading(true);
+    setError("");
+
+    const supabase = getSupabase();
+
+    const { error: insertError } = await supabase
+      .from("waitlist")
+      .insert({ email });
+
+    if (insertError) {
+      setLoading(false);
+      if (insertError.code === "23505") {
+        setError("You're already on the list!");
+      } else {
+        setError("Something went wrong. Try again.");
+      }
+      return;
+    }
+
+    supabase.functions.invoke("send-email", {
+      body: {
+        to: email,
+        subject: "You're on the Yamesa waitlist! 🎶",
+        html: buildWaitlistEmail(),
+      },
+    });
+
+    setLoading(false);
     setSubmitted(true);
+  }
+
+  function buildWaitlistEmail() {
+    return `
+      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 40px 24px; background: #0B0A0B; color: #ffffff;">
+        <div style="margin-bottom: 32px;">
+          <strong style="font-size: 18px; letter-spacing: 0.05em;">YAMESA</strong>
+        </div>
+        <h1 style="font-size: 28px; font-weight: 700; margin: 0 0 16px; line-height: 1.2;">
+          You're in.
+        </h1>
+        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 24px;">
+          Thanks for joining the Yamesa waitlist. You'll be among the first to experience music discovery beyond the algorithm.
+        </p>
+        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 24px;">
+          We're building something different — a platform where every artist is handpicked and every track is chosen by real listeners. No algorithms. No agenda. Just discovery.
+        </p>
+        <p style="font-size: 16px; line-height: 1.6; color: #cccccc; margin: 0 0 32px;">
+          We'll be in touch soon with early access details.
+        </p>
+        <div style="border-top: 1px solid #222; padding-top: 24px; font-size: 13px; color: #666;">
+          Yamesa — Discovery beyond the algorithm
+        </div>
+      </div>
+    `;
   }
 
   return (
@@ -75,31 +132,39 @@ export default function Waitlist() {
                     You&apos;re on the list. We&apos;ll be in touch soon.
                   </div>
                 ) : (
-                  <form onSubmit={onSubmit} className="mt-10 flex items-center rounded-[50px] max-w-[447px] h-[46px]" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)", backdropFilter: "blur(40px) saturate(2)", WebkitBackdropFilter: "blur(40px) saturate(2)", border: "1.5px solid rgba(255,255,255,0.28)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.3)" }}>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      suppressHydrationWarning
-                      className="flex-1 bg-transparent px-5 py-3 text-sm text-white placeholder:text-white/35 outline-none"
-                    />
-                    <button
-                      type="submit"
-                      suppressHydrationWarning
-                      className="shrink-0 rounded-[50px] px-10 py-2.5 text-[13px] font-semibold text-white transition"
-                      style={{
-                        background: "linear-gradient(180deg, rgba(255,91,145,0.2) 0%, rgba(254,55,86,0.12) 100%)",
-                        backdropFilter: "blur(20px) saturate(1.8)",
-                        WebkitBackdropFilter: "blur(20px) saturate(1.8)",
-                        border: "1.5px solid rgba(255,100,150,0.3)",
-                        boxShadow: "inset 0 1px 1px rgba(255,180,200,0.2), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(255,80,120,0.1)",
-                      }}
-                    >
-                      Join Waitlist
-                    </button>
-                  </form>
+                  <div className="mt-10">
+                    <form onSubmit={onSubmit} className="flex items-center rounded-[50px] max-w-[447px] h-[46px]" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)", backdropFilter: "blur(40px) saturate(2)", WebkitBackdropFilter: "blur(40px) saturate(2)", border: "1.5px solid rgba(255,255,255,0.28)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.3)" }}>
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        suppressHydrationWarning
+                        className="flex-1 bg-transparent px-5 py-3 text-sm text-white placeholder:text-white/35 outline-none"
+                      />
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        suppressHydrationWarning
+                        className="shrink-0 rounded-[50px] px-10 py-2.5 text-[13px] font-semibold text-white transition disabled:opacity-50"
+                        style={{
+                          background: "linear-gradient(180deg, rgba(255,91,145,0.2) 0%, rgba(254,55,86,0.12) 100%)",
+                          backdropFilter: "blur(20px) saturate(1.8)",
+                          WebkitBackdropFilter: "blur(20px) saturate(1.8)",
+                          border: "1.5px solid rgba(255,100,150,0.3)",
+                          boxShadow: "inset 0 1px 1px rgba(255,180,200,0.2), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(255,80,120,0.1)",
+                        }}
+                      >
+                        {loading ? "..." : "Join Waitlist"}
+                      </button>
+                    </form>
+                    {error && (
+                      <p className="mt-3 font-heading text-[12px] text-red-400/80 pl-5">
+                        {error}
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
 
