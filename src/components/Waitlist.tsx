@@ -76,9 +76,9 @@ export default function Waitlist() {
           >
             <div className="flex">
               {/* Main ticket area */}
-              <div className="flex-1 pl-8 pr-6 py-8 md:pl-10 md:pr-8 md:py-10">
+              <div className="flex-1 pl-4 pr-3 py-6 md:pl-10 md:pr-8 md:py-10">
                 {/* Logo */}
-                <div className="flex items-center gap-2.5 mb-14">
+                <div className="flex items-center gap-2.5 mb-8 md:mb-14">
                   <Image
                     src="/logos/white-logo-bg-less.png"
                     alt=""
@@ -105,8 +105,8 @@ export default function Waitlist() {
                     You&apos;re on the list. We&apos;ll be in touch soon.
                   </div>
                 ) : (
-                  <div className="mt-10">
-                    <form onSubmit={onSubmit} className="flex items-center rounded-[50px] max-w-[447px] h-[46px]" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)", backdropFilter: "blur(40px) saturate(2)", WebkitBackdropFilter: "blur(40px) saturate(2)", border: "1.5px solid rgba(255,255,255,0.28)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.3)" }}>
+                  <div className="mt-6 md:mt-10">
+                    <form onSubmit={onSubmit} className="flex items-center rounded-[50px] h-[42px] md:h-[46px] md:max-w-[447px]" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)", backdropFilter: "blur(40px) saturate(2)", WebkitBackdropFilter: "blur(40px) saturate(2)", border: "1.5px solid rgba(255,255,255,0.28)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25), inset 0 -1px 1px rgba(0,0,0,0.15), 0 2px 12px rgba(0,0,0,0.3)" }}>
                       <input
                         type="email"
                         required
@@ -114,13 +114,13 @@ export default function Waitlist() {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
                         suppressHydrationWarning
-                        className="flex-1 bg-transparent px-5 py-3 text-sm text-white placeholder:text-white/35 outline-none"
+                        className="flex-1 min-w-0 bg-transparent px-4 py-2 md:px-5 md:py-3 text-[12px] md:text-sm text-white placeholder:text-white/35 outline-none"
                       />
                       <button
                         type="submit"
                         disabled={loading}
                         suppressHydrationWarning
-                        className="shrink-0 rounded-[50px] px-10 py-2.5 text-[13px] font-semibold text-white transition disabled:opacity-50"
+                        className="shrink-0 rounded-[50px] px-4 md:px-10 py-2 md:py-2.5 text-[11px] md:text-[13px] font-semibold text-white transition disabled:opacity-50 mr-1"
                         style={{
                           background: "linear-gradient(180deg, rgba(255,91,145,0.2) 0%, rgba(254,55,86,0.12) 100%)",
                           backdropFilter: "blur(20px) saturate(1.8)",
