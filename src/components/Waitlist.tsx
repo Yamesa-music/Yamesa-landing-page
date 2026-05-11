@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { getSupabase } from "@/lib/supabase";
 
 export default function Waitlist() {
@@ -10,6 +10,13 @@ export default function Waitlist() {
   const [showRoleSelect, setShowRoleSelect] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    getSupabase().rpc("get_waitlist_count").then(({ data }) => {
+      if (data !== null) setCount(data + 223);
+    });
+  }, [submitted]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -102,7 +109,8 @@ export default function Waitlist() {
                   All Access Pass
                 </h3>
                 <p className="mt-2 font-heading text-[14px] text-white/40">
-                  Access, before the rest.
+                  <span className="hidden md:inline">Access, before the rest.</span>
+                  <span className="md:hidden font-bold text-white/70">Pass No. {String(count).padStart(6, "0")}</span>
                 </p>
 
                 {/* Form */}
@@ -150,10 +158,10 @@ export default function Waitlist() {
               {/* Stub / right section with dashed border */}
               <div className="hidden md:flex flex-col justify-center w-[200px] border-l border-dashed border-white/20 pl-6 pr-5 py-8">
                 <span className="font-heading text-[11px] font-medium tracking-[0.2em] text-white/40 uppercase">
-                  Admit One
+                  Pass No.
                 </span>
                 <span className="mt-4 font-heading text-[2.2rem] font-bold text-white/70 tracking-wider">
-                  000148
+                  {String(count).padStart(6, "0")}
                 </span>
                 <p className="mt-5 font-heading text-[10px] font-semibold text-white/50 tracking-wide">
                   Discover YAMESA early.
