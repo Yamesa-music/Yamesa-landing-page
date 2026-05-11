@@ -7,22 +7,28 @@ import { getSupabase } from "@/lib/supabase";
 export default function Waitlist() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [showRoleSelect, setShowRoleSelect] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!email) return;
-
-    setLoading(true);
     setError("");
+    setShowRoleSelect(true);
+  }
+
+  async function selectRole(role: "listener" | "creator") {
+    setLoading(true);
 
     const { error: insertError } = await getSupabase()
       .from("waitlist")
-      .insert([{ email }]);
+      .insert([{ email, role }]);
+
+    setLoading(false);
 
     if (insertError) {
-      setLoading(false);
+      setShowRoleSelect(false);
       if (insertError.code === "23505") {
         setError("You're already on the list!");
       } else {
@@ -39,7 +45,7 @@ export default function Waitlist() {
       process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
     ).catch(() => {});
 
-    setLoading(false);
+    setShowRoleSelect(false);
     setSubmitted(true);
   }
 
@@ -160,6 +166,52 @@ export default function Waitlist() {
           </div>
         </div>
       </div>
+
+      {/* Role selection modal */}
+      {showRoleSelect && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+          <div
+            className="relative rounded-[28px] p-8 max-w-sm w-full text-center"
+            style={{
+              background: "linear-gradient(179.75deg, rgba(0,0,0,0.15) 0.22%, rgba(0,0,0,0) 52.11%), linear-gradient(75.21deg, rgba(255,250,254,0) 63.57%, rgba(224,109,201,0.126) 100.24%), linear-gradient(39.86deg, rgba(0,0,0,0.2) 39.65%, rgba(102,102,102,0.2) 93.23%)",
+              border: "2px solid rgba(255,255,255,0.2)",
+              boxShadow: "0px 20px 60px rgba(0,0,0,0.5)",
+            }}
+          >
+            <h3 className="font-heading text-[1.3rem] font-bold text-white mb-2">
+              Welcome aboard!
+            </h3>
+            <p className="font-heading text-[13px] text-white/50 mb-6">
+              Are you joining as a...
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => selectRole("listener")}
+                className="flex-1 rounded-full py-3.5 text-[14px] font-semibold text-white transition hover:scale-[1.02]"
+                style={{
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
+                  border: "1.5px solid rgba(255,255,255,0.22)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1)",
+                }}
+              >
+                Listener
+              </button>
+              <button
+                onClick={() => selectRole("creator")}
+                className="flex-1 rounded-full py-3.5 text-[14px] font-semibold text-white transition hover:scale-[1.02]"
+                style={{
+                  background: "linear-gradient(180deg, rgba(255,91,145,0.2) 0%, rgba(254,55,86,0.1) 100%)",
+                  border: "1.5px solid rgba(255,100,150,0.3)",
+                  boxShadow: "inset 0 1px 0 rgba(255,180,200,0.15)",
+                }}
+              >
+                Creator
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
