@@ -9,7 +9,7 @@ export default function About() {
       className="relative overflow-hidden bg-[#0B0A0B]"
     >
       {/* Desktop layout */}
-      <div className="relative hidden md:flex w-full h-dvh mx-auto items-center justify-center">
+      <div className="relative hidden lg:flex w-full h-dvh mx-auto items-center justify-center">
         <div className="relative w-full" style={{ height: "80%" }}>
           {/* Center heading */}
           <h2
@@ -41,7 +41,7 @@ export default function About() {
               width: "21%",
               height: "auto",
               left: "44%",
-              top: "52%",
+              top: "53.5%",
               transform: "rotate(-2.06deg)",
             }}
           />
@@ -133,7 +133,7 @@ export default function About() {
       </div>
 
       {/* Mobile layout */}
-      <div className="flex flex-col items-center px-6 py-16 md:hidden">
+      <div className="flex flex-col items-center px-6 py-16 lg:hidden">
         <h2 className="font-heading font-semibold text-[10vw] leading-[1.2] text-center mb-12">
           <span className="bg-gradient-to-r from-[#FF69B4] via-[#FFB347] to-[#FF69B4] bg-clip-text text-transparent bg-[length:200%_100%]">
             No algorithm
